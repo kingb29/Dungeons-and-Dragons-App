@@ -14,6 +14,39 @@ body {
     padding-right: 15px;
 }
 
+.stat-div {
+    font-family: 'Acme', sans-serif;
+    position: relative;
+    text-align: center;
+}
+
+    .stat-div img {
+        max-width: 100px;
+    }
+
+    .stat-div .stat-name {
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .stat-div .stat-number {
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3em;
+    }
+
+    .stat-div .stat-modifier {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+    }
+
 .character-div-title {
     font-family: 'Acme', sans-serif;
 }
@@ -23,9 +56,9 @@ body {
     border: 4px solid black;
 }
 
-.character-div p {
-    margin: 0px;
-}
+    .character-div p {
+        margin: 0px;
+    }
 
 .character-div-text {
     padding: 20px;
