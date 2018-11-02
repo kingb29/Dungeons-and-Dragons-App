@@ -1,0 +1,167 @@
+﻿.row {
+    margin: 50px 0px;
+}
+
+/* formatting */
+.char-stat-div, .char-hp-div, .char-armor-div, .char-init-div, .char-speed-div {
+    font-family: 'Acme', sans-serif;
+    position: relative;
+    text-align: center;
+}
+
+/* ---- STATS ---- */
+    .char-stat-div img {
+        max-width: 100px;
+    }
+
+    .char-stat-div .char-stat-name {
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .char-stat-div .char-stat-number {
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3em;
+    }
+
+    .char-stat-div .char-stat-modifier {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 2em;
+    }
+
+/* ---- HIT POINTS ---- */
+.char-hp-border {
+    border: 4px solid black;
+    border-radius: 30px;
+    min-height: 120px;
+    margin-top: 10px;
+}
+
+.char-hp-section {
+    width:33.3333%;
+    float:left;
+    min-height: 116px;
+}
+
+.char-hp-section:nth-child(2) {
+    border-right: 4px solid black;
+    border-left: 4px solid black;
+}
+
+.char-hp-name {
+    border-bottom: 4px solid black;
+}
+
+.char-hp-number {
+    font-size: 3em;
+}
+
+/* ---- ARMOR ---- */
+    .char-armor-div img {
+        max-width: 100px;
+    }
+    .char-armor-div .char-armor-name {
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .char-armor-div .char-armor-number {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 3em;
+    }
+
+/* ---- INITIATIVE ---- */
+.char-init-border {
+    border: 4px solid black;
+    border-radius: 25px;
+    min-height: 120px;
+    margin-top: 10px;
+}
+
+.char-init-name {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.char-init-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+}
+
+/* ---- SPEED ---- */
+.char-speed-border {
+    border: 4px solid black;
+    border-radius: 100%;
+    min-height: 120px;
+    margin-top: 10px;
+}
+
+.char-speed-name {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.char-speed-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em;
+}
+
+/* ---- OTHER ---- */
+.char-div-title {
+    font-family: 'Acme', sans-serif;
+    text-align: left;
+    margin-top: 5px;
+    color: #000;
+}
+
+.char-div-title h3 {
+    margin-top: 5px;
+}
+
+.char-div-title-left {
+    float: left;
+
+}
+.char-div-title-right {
+    float: right;
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.char-div {
+    position: relative;
+    border: 4px solid black;
+}
+
+    .char-div p {
+        margin: 0px;
+    }
+
+.char-div-text {
+    padding: 20px;
+    font-family: 'Acme', sans-serif;
+    font-size: 20px;
+}

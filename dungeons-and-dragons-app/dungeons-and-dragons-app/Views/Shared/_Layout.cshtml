@@ -1,9 +1,10 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    @RenderSection("Styles", required: false);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - dungeons_and_dragons_app</title>
+    <title>@ViewData["Title"] - Dungeons and Dragons Combat Companion</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -26,13 +27,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">dungeons_and_dragons_app</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Dungeons and Dragons Combat Companion</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Characters</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">Account</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -44,7 +45,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - dungeons_and_dragons_app</p>
+            <p>&copy; 2018 - Dungeons and Dragons Combat Companion</p>
         </footer>
     </div>
 
@@ -69,6 +70,5 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
-    @RenderSection("Scripts", required: false)
 </body>
 </html>
