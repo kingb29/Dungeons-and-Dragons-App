@@ -22,9 +22,9 @@ namespace dungeons_and_dragons_app.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult CharacterCreation()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Create a character";
 
             return View();
         }

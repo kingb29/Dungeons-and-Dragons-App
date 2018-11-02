@@ -1,0 +1,8 @@
+﻿@section Styles {
+    <link href="@Url.Content("~/css/site.css")" rel="stylesheet" type="text/css" /> 
+    <link href="@Url.Content("~/css/createCharacter.css")" rel="stylesheet" type="text/css" />
+}
+.char-hp-name {
+    border-bottom: 4px solid black;
+    font-family: 'Acme', sans-serif;
+}
