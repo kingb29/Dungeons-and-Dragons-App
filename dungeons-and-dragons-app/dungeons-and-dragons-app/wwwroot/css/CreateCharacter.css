@@ -2,7 +2,7 @@
 .char-div-picture {
     position:absolute;
     top:116px;
-    right:160px;
+    right:345px;
 }
 
 .char-div-info {
@@ -25,13 +25,13 @@
 .char-div-equipment {
     position: absolute;
     top: 133px;
-    right: 920px;
+    right: 923px;
 }
 
 .char-div-weapons {
     position: absolute;
     top: 300px;
-    right: 915px;
+    right: 929px;
 }
 
 .equipment-nav ul {
@@ -43,24 +43,37 @@
 }
 
 .char-div-equipment-list {
-    
+    position: absolute;
+    top: 571px;
+    right: 970px;
 }
 
 .char-div-weapon-list {
-
-}
-
-/*This is for the entire second row of lists (spell-list and armor-list)*/
-.char-div-spells-armor {
     position: absolute;
-    top: 557px;
-    right: 1100px;
-}
-
-.char-div-spell-list{
-
+    top: 571px;
+    right: 1140px;
 }
 
 .char-div-armor-list {
+    position: absolute;
+    top: 571px;
+    right: 700px;
+}
 
+.char-div-spells {
+    position: absolute;
+    top: 134px;
+    right: 690px;
+}
+
+.char-div-armor {
+    position: absolute;
+    top: 301px;
+    right: 687px;
+}
+
+.char-div-save {
+    position: absolute;
+    top: 532px;
+    right: 440px;
 }

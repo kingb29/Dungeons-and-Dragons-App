@@ -64,101 +64,143 @@
         <br>
     </div>
     <br>
-    <input type="submit" value="Save Character">
+    <div class="char-div-save">
+        <input type="submit" value="Save Character">
+    </div>
 </form>
-    <form action="equipmentAdd.js">
-        <div class="char-div-equipment">
-            <strong>Equipment:</strong><br>
-            Name: <br>
-            <input type="text" name="characterEquipmentName" value="">
-            <br>
-            Quantity: <br>
-            <input type="text" name="characterEquipmentQuantity" value="">
-            <br>
-            <br>
-            <input type="submit" value="Add Equipment">
-        </div>
+<form action="equipmentAdd.js">
+    <div class="char-div-equipment">
+        <strong>Equipment:</strong><br>
+        <select class="char-equipment-list-unselected">
+            <option value="equipment1">Torches</option>
+            <option value="equipment1">Arrows</option>
+            <option value="equipment1">Map</option>
+            <option value="equipment1">Candle</option>
+            <option value="equipment1">Climbers Kit</option>
+            <option value="equipment1">Healer's Kit</option>
+            <option value="equipment1">Holy Symbol</option>
+            <option value="equipment1">Hunting Trap</option>
+        </select>
+        <br>
+        <br>
+        Quantity: <br>
+        <input type="text" name="characterEquipmentQuantity" value="1">
+        <br>
+        <br>
+        <input type="submit" value="Add Equipment">
+    </div>
 </form>
 <br>
-    <form action="weaponsAdd.js">
-        <div class="char-div-weapons">
-            <strong>Weapons:</strong><br>
-            Name: <br>
-            <input type="text" name="characterWeaponName" value="">
-            <br>
-            Damage: (ex. d10,d6,etc) <br>
-            <input type="text" name="characterWeaponDamage" value="">
-            <br>
-            Weapon Type: (ex. 2h,1h,etc) <br>
-            <input type="text" name="characterWeaponType" value="">
-            <br>
-            <br>
-            <input type="submit" value="Add Weapon">
-        </div>
-    </form>
-    <br>
-    <form action="deleteEquipmentItem.js">
+<form action="weaponAdd.js">
+    <div class="char-div-weapons">
+        <strong>Weapons:</strong><br>
+        <select class="char-weapons-list-unselected">
+            <option value="equipment1">Great Sword (2h) (d10)</option>
+            <option value="equipment1">Long Sword (1h) (d6)</option>
+            <option value="equipment1">Hunter's Bow (2h) (d6)</option>
+            <option value="equipment1">Staff of Light (2h) (d3)</option>
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="Add Weapon">
+    </div>
+</form>
+
+<form action="spellAdd.js">
+    <div class="char-div-spells">
+        <strong>Spells:</strong><br>
+        <select class="char-spells-list-unselected">
+            <option value="equipment1">Fireball (20m) (d10)</option>
+            <option value="equipment1">Lightning Bolt (10m) (d6)</option>
+            <option value="equipment1">Fire Storm (20m) (d6)</option>
+            <option value="equipment1">Flash Heal (40m) (d10)</option>
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="Add Spell">
+    </div>
+</form>
+<br>
+<form action="armorAdd.js">
+    <div class="char-div-armor">
+        <strong>Armor:</strong><br>
+        <select class="char-armor-list-unselected">
+            <option value="equipment1">Fireball (20m) (d10)</option>
+            <option value="equipment1">Lightning Bolt (10m) (d6)</option>
+            <option value="equipment1">Fire Storm (20m) (d6)</option>
+            <option value="equipment1">Flash Heal (40m) (d10)</option>
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="Add Spell">
+    </div>
+</form>
+
+
+
+
+
+
+
+
+<br>
+<form action="deleteEquipmentItem.js">
     <div class="char-div-equipment-list">
         Current Equipment: <br>
-                   <select class="char-equipment-list">
-                       <option value="equipment1">Torches (5)</option>
-                       <option value="equipment1">Arrows (20)</option>
-                       <option value="equipment1">Map</option>
-                       <option value="equipment1">Candle (5)</option>
-                       <option value="equipment1">Climbers Kit</option>
-                       <option value="equipment1">Healer's Kit</option>
-                       <option value="equipment1">Holy Symbol</option>
-                       <option value="equipment1">Hunting Trap</option>
-                   </select>
-                   <br>
-                   <br>
-                   <input type ="submit" value="Delete" >
-    </div>
+        <select class="char-equipment-list">
+            <option value="equipment1">Hunting Trap</option>
+            <option value="equipment1">Torches (5)</option>
+            <option value="equipment1">Arrows (20)</option>
+            <option value="equipment1">Map</option>
+            <option value="equipment1">Candle (5)</option>
+        </select>
         <br>
-    </form>
-    <form action="deleteWeaponItem.js">
-        <div class="char-div-weapon-list">
-            Current Weapons: <br>
-                             <select class="char-equipment-list">
-                                 <option value="equipment1">Great Sword (2h) (d10)</option>
-                                 <option value="equipment1">Long Sword (1h) (d6)</option>
-                                 <option value="equipment1">Hunter's Bow (2h) (d6)</option>
-                                 <option value="equipment1">Staff of Light (2h) (d3)</option>
-                             </select>                 
+        <br>
+        <input type="submit" value="Delete">
+    </div>
+    <br>
+</form>
+<form action="deleteWeaponItem.js">
+    <div class="char-div-weapon-list">
+        Current Weapons: <br>
+        <select class="char-equipment-list">
+            <option value="equipment1">Great Sword (2h) (d10)</option>
+            <option value="equipment1">Long Sword (1h) (d6)</option>
+            <option value="equipment1">Hunter's Bow (2h) (d6)</option>
+            <option value="equipment1">Staff of Light (2h) (d3)</option>
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="Delete">
+    </div>
+</form>
+    <form action="deleteSpell.js">
+        <div class="char-div-spell-list">
+            Current Spells: <br>
+            <select class="char-spell-list">
+                <option value="equipment1">Fireball (20m) (d10)</option>
+                <option value="equipment1">Lightning Bolt (10m) (d6)</option>
+                <option value="equipment1">Fire Storm (20m) (d6)</option>
+                <option value="equipment1">Flash Heal (40m) (d10)</option>
+            </select>
             <br>
             <br>
             <input type="submit" value="Delete">
         </div>
     </form>
-    <div class="char-div-spells-armor">
-        <form action="deleteSpell.js">
-            <div class="char-div-spell-list">
-                Current Spells: <br>
-                <select class="char-spell-list">
-                    <option value="equipment1">Fireball (20m) (d10)</option>
-                    <option value="equipment1">Lightning Bolt (10m) (d6)</option>
-                    <option value="equipment1">Fire Storm (20m) (d6)</option>
-                    <option value="equipment1">Flash Heal (40m) (d10)</option>
-                </select>
-                <br>
-                <br>
-                <input type="submit" value="Delete">
-            </div>
-        </form>
-<br>
+    <br>
     <form action="deleteArmor.js">
-            <div class="char-div-armor-list">
-                Current Armor: <br>
-                <select class="char-armor-list">
-                    <option value="equipment1">Steel Platelegs (Heavy) (+5 AC)</option>
-                    <option value="equipment1">Caster's Robe (Light) (+1 AC)</option>
-                    <option value="equipment1"> Steel Breastplate (Heavy) (+5 AC)</option>
-                </select>
-                <br>
-                <br>
-                <input type="submit" value="Delete">
-            </div>
-        </form>
-    </div>
+        <div class="char-div-armor-list">
+            Current Armor: <br>
+            <select class="char-armor-list">
+                <option value="equipment1">Steel Platelegs (Heavy) (+5 AC)</option>
+                <option value="equipment1">Caster's Robe (Light) (+1 AC)</option>
+                <option value="equipment1"> Steel Breastplate (Heavy) (+5 AC)</option>
+            </select>
+            <br>
+            <br>
+            <input type="submit" value="Delete">
+        </div>
+    </form>
 
 
