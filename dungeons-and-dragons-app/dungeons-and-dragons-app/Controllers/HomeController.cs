@@ -1,17 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using MySql.Data.MySqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using dungeons_and_dragons_app.Models;
+using Microsoft.Extensions.Options;
 
 namespace dungeons_and_dragons_app.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly string connectionString;
+
+        public HomeController(AppSetting appSetting)
+        {
+            connectionString = appSetting.ConnectionString;
+        }
+
         public IActionResult Index()
         {
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    con.Open();
+                }
+                catch (MySqlException e)
+                {
+                    Console.Write(e);
+                }
+            }
+            return null;
             return View();
         }
 
@@ -26,7 +47,26 @@ namespace dungeons_and_dragons_app.Controllers
         {
             ViewData["Message"] = "Create a character";
 
+
+
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult CharacterCreation(Character character)
+        {
+            using (MySqlConnection con = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    con.Open();
+                    //return true;
+                }
+                catch (MySqlException e) {
+                    
+                }
+            }
+            return null;
         }
 
         public IActionResult Privacy()
