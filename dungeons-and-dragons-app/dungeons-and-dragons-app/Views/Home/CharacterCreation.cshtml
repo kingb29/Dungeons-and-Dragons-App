@@ -1,7 +1,164 @@
-﻿@{
+﻿@section Styles {
+    <link href="@Url.Content("~/css/CreateCharacter.css")" rel="stylesheet" type="text/css" />
+}
+
+@{
     ViewData["Title"] = "Create a Character";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<h4 class="char-init-name">SPEED</h4>
+<h2>@ViewData["Title"]</h2>
+
+<form action="somePage.js">
+    <div class="char-div-picture">
+        <img src="~/images/dndcharmain2.png" />
+    </div>
+    <div class="char-div-info">
+        Name:<br>
+        <input type="text" name="characterName" value="">
+        <br>
+        <br>
+        Class:<br>
+        <input type="text" name="characterClass" value="">
+        <br>
+        <br>
+        Race:<br>
+        <input type="text" name="characterRace" value="">
+        <br>
+        <br>
+        Level:<br>
+        <input type="text" name="characterLevel" value="">
+        <br>
+        <br>
+        Sex:<br>
+        <div>
+            <input type="radio" name="characterSex" id="male" value=""> <label for="male">Male</label>
+        </div>
+        <div>
+            <input type="radio" name="characterSex" id="female" value=""> <label for="female">Female</label>
+        </div>
+    </div>
+    <div class="char-div-stats">
+        Strength:<br>
+        <input type="text" name="characterStrength" value="">
+        <br>
+        <br>
+        Constitution:<br>
+        <input type="text" name="characterConstitution" value="">
+        <br>
+        <br>
+        Charisma:<br>
+        <input type="text" name="characterCharisma" value="">
+        <br>
+        <br>
+        Wisdom:<br>
+        <input type="text" name="characterWisdom" value="">
+        <br>
+        <br>
+        Intelligence:<br>
+        <input type="text" name="characterIntelligence" value="">
+        <br>
+        <br>
+        Dexterity:<br>
+        <input type="text" name="characterDexterity" value="">
+        <br>
+        <br>
+    </div>
+    <br>
+    <input type="submit" value="Save Character">
+</form>
+    <form action="equipmentAdd.js">
+        <div class="char-div-equipment">
+            <strong>Equipment:</strong><br>
+            Name: <br>
+            <input type="text" name="characterEquipmentName" value="">
+            <br>
+            Quantity: <br>
+            <input type="text" name="characterEquipmentQuantity" value="">
+            <br>
+            <br>
+            <input type="submit" value="Add Equipment">
+        </div>
+</form>
+<br>
+    <form action="weaponsAdd.js">
+        <div class="char-div-weapons">
+            <strong>Weapons:</strong><br>
+            Name: <br>
+            <input type="text" name="characterWeaponName" value="">
+            <br>
+            Damage: (ex. d10,d6,etc) <br>
+            <input type="text" name="characterWeaponDamage" value="">
+            <br>
+            Weapon Type: (ex. 2h,1h,etc) <br>
+            <input type="text" name="characterWeaponType" value="">
+            <br>
+            <br>
+            <input type="submit" value="Add Weapon">
+        </div>
+    </form>
+    <br>
+    <form action="deleteEquipmentItem.js">
+    <div class="char-div-equipment-list">
+        Current Equipment: <br>
+                   <select class="char-equipment-list">
+                       <option value="equipment1">Torches (5)</option>
+                       <option value="equipment1">Arrows (20)</option>
+                       <option value="equipment1">Map</option>
+                       <option value="equipment1">Candle (5)</option>
+                       <option value="equipment1">Climbers Kit</option>
+                       <option value="equipment1">Healer's Kit</option>
+                       <option value="equipment1">Holy Symbol</option>
+                       <option value="equipment1">Hunting Trap</option>
+                   </select>
+                   <br>
+                   <br>
+                   <input type ="submit" value="Delete" >
+    </div>
+        <br>
+    </form>
+    <form action="deleteWeaponItem.js">
+        <div class="char-div-weapon-list">
+            Current Weapons: <br>
+                             <select class="char-equipment-list">
+                                 <option value="equipment1">Great Sword (2h) (d10)</option>
+                                 <option value="equipment1">Long Sword (1h) (d6)</option>
+                                 <option value="equipment1">Hunter's Bow (2h) (d6)</option>
+                                 <option value="equipment1">Staff of Light (2h) (d3)</option>
+                             </select>                 
+            <br>
+            <br>
+            <input type="submit" value="Delete">
+        </div>
+    </form>
+    <div class="char-div-spells-armor">
+        <form action="deleteSpell.js">
+            <div class="char-div-spell-list">
+                Current Spells: <br>
+                <select class="char-spell-list">
+                    <option value="equipment1">Fireball (20m) (d10)</option>
+                    <option value="equipment1">Lightning Bolt (10m) (d6)</option>
+                    <option value="equipment1">Fire Storm (20m) (d6)</option>
+                    <option value="equipment1">Flash Heal (40m) (d10)</option>
+                </select>
+                <br>
+                <br>
+                <input type="submit" value="Delete">
+            </div>
+        </form>
+<br>
+    <form action="deleteArmor.js">
+            <div class="char-div-armor-list">
+                Current Armor: <br>
+                <select class="char-armor-list">
+                    <option value="equipment1">Steel Platelegs (Heavy) (+5 AC)</option>
+                    <option value="equipment1">Caster's Robe (Light) (+1 AC)</option>
+                    <option value="equipment1"> Steel Breastplate (Heavy) (+5 AC)</option>
+                </select>
+                <br>
+                <br>
+                <input type="submit" value="Delete">
+            </div>
+        </form>
+    </div>
+
+
