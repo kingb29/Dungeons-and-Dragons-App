@@ -1,0 +1,79 @@
+﻿
+.char-div-picture {
+    position:absolute;
+    top:116px;
+    right:345px;
+}
+
+.char-div-info {
+
+}
+
+.char-div-picture img {
+    max-height:400px;
+    max-width:600px;
+    object-fit:cover;
+    
+}
+
+.char-div-stats {
+    position:absolute;
+    top:133px;
+    right:1140px;
+}
+
+.char-div-equipment {
+    position: absolute;
+    top: 133px;
+    right: 923px;
+}
+
+.char-div-weapons {
+    position: absolute;
+    top: 300px;
+    right: 929px;
+}
+
+.equipment-nav ul {
+    height: 100px;
+    width: 18%;
+    overflow:hidden;
+    overflow-y:scroll;
+    max-height: 100%;
+}
+
+.char-div-equipment-list {
+    position: absolute;
+    top: 571px;
+    right: 970px;
+}
+
+.char-div-weapon-list {
+    position: absolute;
+    top: 571px;
+    right: 1140px;
+}
+
+.char-div-armor-list {
+    position: absolute;
+    top: 571px;
+    right: 700px;
+}
+
+.char-div-spells {
+    position: absolute;
+    top: 134px;
+    right: 690px;
+}
+
+.char-div-armor {
+    position: absolute;
+    top: 301px;
+    right: 687px;
+}
+
+.char-div-save {
+    position: absolute;
+    top: 532px;
+    right: 440px;
+}
