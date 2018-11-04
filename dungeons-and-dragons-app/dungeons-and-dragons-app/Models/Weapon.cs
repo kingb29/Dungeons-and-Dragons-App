@@ -2,10 +2,10 @@
 
 public class Weapon
 {
-    private string[] properties;
-    private bool proficiency;
+    public string[] properties { get; set; }
+    public bool proficiency { get; set; }
 
-	public Weapon()
+    public Weapon()
 	{
         properties = new string[0];
         proficiency = false;
@@ -13,8 +13,7 @@ public class Weapon
     public Weapon(string[] propertiesIn, bool proficiencyIn)
     {
         this.properties = propertiesIn;
-        this.proficeincy = proficiencyIn;
+        this.proficiency = proficiencyIn;
     }
-    public string[] properties { get; set; }
-    public bool proficiency { get; set; }
+    
 }

@@ -2,11 +2,11 @@
 
 public class Spell
 {
-    private string description;
-    private bool isDCSave;
-    private bool isConcentration;
+    public string description { get; set; }
+    public bool isDCSave { get; set; }
+    public bool isConcentration { get; set; }
 
-	public Spell()
+    public Spell()
 	{
         description = "";
         isDCSave = false;
@@ -16,9 +16,6 @@ public class Spell
     {
         this.description = descriptionIn;
         this.isDCSave = isDCSaveIn;
-        this.isConcentration = isConcnetrationIn;
+        this.isConcentration = isConcentrationIn;
     }
-    public string description { get; set; }
-    public bool isDCSave { get; set; }
-    public bool isConcentration { get; set; }
 }

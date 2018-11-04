@@ -2,10 +2,10 @@
 
 public class Race
 {
-    private string name;
-    private int[] features;
+    public string name { get; set; }
+    public int[] features { get; set; }
 
-	public Race()
+    public Race()
 	{
         name = "";
         features = new int[0];
@@ -15,6 +15,4 @@ public class Race
         this.name = nameIn;
         this.features = featuresIn;
     }
-    public string username { get; set; }
-    public int[] features { get; set; }
 }
