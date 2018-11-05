@@ -6,7 +6,7 @@
     ViewData["Title"] = "Create a Character";
 }
 
-@model Character;
+@model CharacterViewModel;
 
 <h2>@ViewData["Title"]</h2>
 
@@ -19,11 +19,11 @@
             <br>
             <br>
             Class:<br>
-            @Html.TextBoxFor(m => m.charClass)
+            @Html.DropDownListFor(m => m.race, Model.classes)
             <br>
             <br>
             Race:<br>
-            @Html.TextBoxFor(m => m.race)
+            @Html.DropDownListFor(m => m.race, Model.races)
             <br>
             <br>
             Level:<br>
@@ -62,36 +62,29 @@
             <br>
             <br>
         </div>
-        <!--<div class="col-xs-12 col-lg-3">
+        <div class="col-xs-12 col-lg-3">
             <div>
                 <strong>Weapons:</strong><br>
-                <select class="char-weapons-list-unselected">
-                    <option value="equipment1">Great Sword (2h) (d10)</option>
-                    <option value="equipment1">Long Sword (1h) (d6)</option>
-                    <option value="equipment1">Hunter's Bow (2h) (d6)</option>
-                    <option value="equipment1">Staff of Light (2h) (d3)</option>
-                </select>
+                @Html.DropDownListFor(m => m.race, Model.weapons)
                 <br>
                 <input type="submit" value="Add Weapon">
                 <br /><br />
             </div>
-                <div>
-                    <strong>Spells:</strong><br>
-                    <select class="char-spells-list-unselected">
-                        <option value="equipment1">Fireball (20m) (d10)</option>
-                        <option value="equipment1">Lightning Bolt (10m) (d6)</option>
-                        <option value="equipment1">Fire Storm (20m) (d6)</option>
-                        <option value="equipment1">Flash Heal (40m) (d10)</option>
-                    </select>
-                    <br>
-                    <input type="submit" value="Add Spell">
-                </div>
+            <div>
+                <strong>Spells:</strong><br>
+                @Html.DropDownListFor(m => m.race, Model.spells)
+                <br>
+                <input type="submit" value="Add Spell">
+            </div>
+            <br /><br /><br />
+            <input type="submit" value="Create Character">
         </div>
         <div class="col-xs-12 col-lg-3 char-div-picture">
             <img src="~/images/dndcharmain2.png" />
         </div>
     </div>
 }
+
 <!--<div class="char-div-picture">
         <img src="~/images/dndcharmain2.png" />
     </div>
@@ -283,5 +276,3 @@
         <input type="submit" value="Delete">
     </div>
 </form>-->
-
-

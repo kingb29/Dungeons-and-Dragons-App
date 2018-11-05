@@ -2,7 +2,6 @@
 
 public class Character
 {
-
     public string name { get; set; }
     public int charSheetID { get; set; }
     public string str { get; set; }
