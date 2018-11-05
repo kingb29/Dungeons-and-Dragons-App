@@ -21,18 +21,6 @@ namespace dungeons_and_dragons_app.Controllers
 
         public IActionResult Index()
         {
-            using (MySqlConnection con = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    con.Open();
-                }
-                catch (MySqlException e)
-                {
-                    Console.Write(e);
-                }
-            }
-            return null;
             return View();
         }
 
@@ -60,7 +48,7 @@ namespace dungeons_and_dragons_app.Controllers
                 try
                 {
                     con.Open();
-                    //return true;
+                    string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,Char) VALUES(person,address)";
                 }
                 catch (MySqlException e) {
                     

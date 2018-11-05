@@ -1,18 +1,15 @@
 ﻿
-.char-div-picture {
+/*.char-div-picture {
     position:absolute;
     top:116px;
     right:345px;
-}
-
-.char-div-info {
-
-}
+}*/
 
 .char-div-picture img {
-    max-height:400px;
+    /*max-height:400px;
     max-width:600px;
-    object-fit:cover;
+    object-fit:cover;*/
+    width: 100%;
     
 }
 
