@@ -8,7 +8,8 @@ public class CharacterViewModel
 {
     public string name { get; set; }
     public string gender { get; set; }
-    public int level { get; set; }
+    public string level { get; set; }
+    public string alignment { get; set; }
     public string str { get; set; }
     public string dex { get; set; }
     public string con { get; set; }
@@ -20,19 +21,25 @@ public class CharacterViewModel
     public string weapon { get; set; }
     public string spell { get; set; }
 
-    public IEnumerable<SelectListItem> races { get; set; }
-    public IEnumerable<SelectListItem> classes { get; set; }
-    //public IEnumerable<SelectListItem> armor { get; set; }
-    public IEnumerable<SelectListItem> weapons { get; set; }
-    public IEnumerable<SelectListItem> spells { get; set; }
+    public IEnumerable<SelectListItem> raceList { get; set; }
+    public IEnumerable<SelectListItem> classList { get; set; }
+    public IEnumerable<SelectListItem> alignmentList { get; set; }
+    public IEnumerable<SelectListItem> weaponList { get; set; }
+    public IEnumerable<SelectListItem> spellList { get; set; }
+
+    public CharacterViewModel()
+    {
+
+    }
 
     public CharacterViewModel(IEnumerable<SelectListItem> racesIn, IEnumerable<SelectListItem> classesIn,
-        IEnumerable<SelectListItem> weaponsIn, IEnumerable<SelectListItem> spellsIn)
+        IEnumerable<SelectListItem> alignmentsIn, IEnumerable<SelectListItem> weaponsIn, IEnumerable<SelectListItem> spellsIn)
     {
-        races = racesIn;
-        classes = classesIn;
-        weapons = weaponsIn;
-        spells = spellsIn;
+        raceList = racesIn;
+        classList = classesIn;
+        alignmentList = alignmentsIn;
+        weaponList = weaponsIn;
+        spellList = spellsIn;
     }
 
 }

@@ -87,7 +87,33 @@ namespace dungeons_and_dragons_app.Controllers
                 }
             }
             IEnumerable<SelectListItem> classList = new SelectList(classes, "id", "name");
-            
+
+            // ALIGNMENT LIST
+            List<Alignment> alignments = new List<Alignment>();
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM Alignment";
+                    MySqlCommand cmd = new MySqlCommand(query, connection);
+                    MySqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        Alignment alignment = new Alignment();
+                        alignment.id = Int32.Parse(dr["AlignmentID"].ToString());
+                        alignment.name = dr["AlignmentName"].ToString();
+                        alignments.Add(alignment);
+                    }
+                    connection.Close();
+                }
+                catch (MySqlException e)
+                {
+                    Console.Write(e);
+                }
+            }
+            IEnumerable<SelectListItem> alignmentList = new SelectList(alignments, "id", "name");
+
             // weapons
             List<Weapon> weapons = new List<Weapon>();
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -139,19 +165,33 @@ namespace dungeons_and_dragons_app.Controllers
             }
             IEnumerable<SelectListItem> spellList = new SelectList(spells, "id", "name");
 
-            CharacterViewModel characterViewModel = new CharacterViewModel(raceList, classList, weaponList, spellList);
+            CharacterViewModel characterViewModel = new CharacterViewModel(raceList, classList, alignmentList, weaponList, spellList);
             return View(characterViewModel);
         }
 
         [HttpPost]
-        public ActionResult CharacterCreation(Character character)
+        public ActionResult CharacterCreation(CharacterViewModel model)
         {
-            using (MySqlConnection con = new MySqlConnection(connectionString))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 try
                 {
-                    con.Open();
-                    string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,Char) VALUES(person,address)";
+                    connection.Open();
+                    string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,RaceID,ClassID,AlignmentID,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma) VALUES(@name,@level,@race,@class,@alignment,@str,@dex,@con,@inte,@wis,@cha)";
+                    MySqlCommand command = new MySqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@name", model.name);
+                    command.Parameters.AddWithValue("@race", Convert.ToInt32(model.race));
+                    command.Parameters.AddWithValue("@level", Convert.ToInt32(model.level));
+                    command.Parameters.AddWithValue("@class", Convert.ToInt32(model.charClass));
+                    command.Parameters.AddWithValue("@alignment", Convert.ToInt32(model.alignment));
+                    command.Parameters.AddWithValue("@str", Convert.ToInt32(model.str));
+                    command.Parameters.AddWithValue("@dex", Convert.ToInt32(model.dex));
+                    command.Parameters.AddWithValue("@con", Convert.ToInt32(model.con));
+                    command.Parameters.AddWithValue("@inte", Convert.ToInt32(model.inte));
+                    command.Parameters.AddWithValue("@wis", Convert.ToInt32(model.wis));
+                    command.Parameters.AddWithValue("@cha", Convert.ToInt32(model.cha));
+                    command.ExecuteNonQuery();
+                    connection.Close();
                 }
                 catch (MySqlException e) {
                     Console.Write(e);
