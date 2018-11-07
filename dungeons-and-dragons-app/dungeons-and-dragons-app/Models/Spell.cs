@@ -2,6 +2,8 @@
 
 public class Spell
 {
+    public int id { get; set; }
+    public string name { get; set; }
     public string description { get; set; }
     public bool isDCSave { get; set; }
     public bool isConcentration { get; set; }

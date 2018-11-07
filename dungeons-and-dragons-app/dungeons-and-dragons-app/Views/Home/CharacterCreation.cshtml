@@ -6,36 +6,114 @@
     ViewData["Title"] = "Create a Character";
 }
 
+@model CharacterViewModel;
+
 <h2>@ViewData["Title"]</h2>
 
-<form action="somePage.js">
-    <div class="char-div-picture">
+@using (Html.BeginForm("CharacterCreation", "Home", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-xs-12 col-lg-3">
+            Name:<br>
+            @Html.TextBoxFor(m => m.name)
+            <br>
+            <br>
+            Race:<br>
+            @Html.DropDownListFor(m => m.race, Model.raceList)
+            <br>
+            <br>
+            Class:<br>
+            @Html.DropDownListFor(m => m.charClass, Model.classList)
+            <br>
+            <br>
+            Level:<br>
+            @Html.TextBoxFor(m => m.level)
+            <br>
+            <br>
+            Alignment:<br>
+            @Html.DropDownListFor(m => m.alignment, Model.alignmentList)
+            <br>
+            <br>
+            Sex:<br>
+            <div>
+                @Html.RadioButtonFor(m => m.gender, "Male") Male
+                @Html.RadioButtonFor(m => m.gender, "Female") Female
+            </div>
+        </div>
+        <div class="col-xs-12 col-lg-3">
+            Strength:<br>
+            @Html.TextBoxFor(m => m.str)
+            <br>
+            <br>
+            Constitution:<br>
+            @Html.TextBoxFor(m => m.con)
+            <br>
+            <br>
+            Dexterity:<br>
+            @Html.TextBoxFor(m => m.dex)
+            <br>
+            <br>
+            Intelligence:<br>
+            @Html.TextBoxFor(m => m.inte)
+            <br>
+            <br>
+            Wisdom:<br>
+            @Html.TextBoxFor(m => m.wis)
+            <br>
+            <br>
+            Charisma:<br>
+            @Html.TextBoxFor(m => m.cha)
+            <br>
+            <br>
+        </div>
+        <div class="col-xs-12 col-lg-3">
+            <div>
+                <strong>Weapons:</strong><br>
+                @Html.DropDownListFor(m => m.weapon, Model.weaponList)
+                <br>
+                <input type="submit" value="Add Weapon">
+                <br /><br />
+            </div>
+            <div>
+                <strong>Spells:</strong><br>
+                @Html.DropDownListFor(m => m.spell, Model.spellList)
+                <br>
+                <input type="submit" value="Add Spell">
+            </div>
+            <br /><br /><br />
+            <input type="submit" value="Create Character">
+        </div>
+        <div class="col-xs-12 col-lg-3 char-div-picture">
+            <img src="~/images/dndcharmain2.png" />
+        </div>
+    </div>
+}
+
+<!--<div class="char-div-picture">
         <img src="~/images/dndcharmain2.png" />
     </div>
     <div class="char-div-info">
         Name:<br>
-        <input type="text" name="characterName" value="">
+        @Html.TextBoxFor(m => m.name)
         <br>
         <br>
         Class:<br>
-        <input type="text" name="characterClass" value="">
+        @Html.TextBoxFor(m => m.charClass)
         <br>
         <br>
         Race:<br>
-        <input type="text" name="characterRace" value="">
+        @Html.TextBoxFor(m => m.race)
         <br>
         <br>
         Level:<br>
-        <input type="text" name="characterLevel" value="">
+        @Html.TextBoxFor(m => m.level)
         <br>
         <br>
         Sex:<br>
-        <div>
-            <input type="radio" name="characterSex" id="male" value=""> <label for="male">Male</label>
-        </div>
-        <div>
-            <input type="radio" name="characterSex" id="female" value=""> <label for="female">Female</label>
-        </div>
+            <div>
+                @Html.RadioButtonFor(m => m.gender, "Male") Male
+                @Html.RadioButtonFor(m => m.gender, "Female") Female
+            </div>
     </div>
     <div class="char-div-stats">
         Strength:<br>
@@ -67,7 +145,7 @@
     <div class="char-div-save">
         <input type="submit" value="Save Character">
     </div>
-</form>
+}
 <form action="equipmentAdd.js">
     <div class="char-div-equipment">
         <strong>Equipment:</strong><br>
@@ -144,7 +222,7 @@
 
 
 <br>
-<form action="deleteEquipmentItem.js">
+<!--<form action="deleteEquipmentItem.js">
     <div class="char-div-equipment-list">
         Current Equipment: <br>
         <select class="char-equipment-list">
@@ -174,33 +252,31 @@
         <input type="submit" value="Delete">
     </div>
 </form>
-    <form action="deleteSpell.js">
-        <div class="char-div-spell-list">
-            Current Spells: <br>
-            <select class="char-spell-list">
-                <option value="equipment1">Fireball (20m) (d10)</option>
-                <option value="equipment1">Lightning Bolt (10m) (d6)</option>
-                <option value="equipment1">Fire Storm (20m) (d6)</option>
-                <option value="equipment1">Flash Heal (40m) (d10)</option>
-            </select>
-            <br>
-            <br>
-            <input type="submit" value="Delete">
-        </div>
-    </form>
-    <br>
-    <form action="deleteArmor.js">
-        <div class="char-div-armor-list">
-            Current Armor: <br>
-            <select class="char-armor-list">
-                <option value="equipment1">Steel Platelegs (Heavy) (+5 AC)</option>
-                <option value="equipment1">Caster's Robe (Light) (+1 AC)</option>
-                <option value="equipment1"> Steel Breastplate (Heavy) (+5 AC)</option>
-            </select>
-            <br>
-            <br>
-            <input type="submit" value="Delete">
-        </div>
-    </form>
-
-
+<form action="deleteSpell.js">
+    <div class="char-div-spell-list">
+        Current Spells: <br>
+        <select class="char-spell-list">
+            <option value="equipment1">Fireball (20m) (d10)</option>
+            <option value="equipment1">Lightning Bolt (10m) (d6)</option>
+            <option value="equipment1">Fire Storm (20m) (d6)</option>
+            <option value="equipment1">Flash Heal (40m) (d10)</option>
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="Delete">
+    </div>
+</form>
+<br>
+<form action="deleteArmor.js">
+    <div class="char-div-armor-list">
+        Current Armor: <br>
+        <select class="char-armor-list">
+            <option value="equipment1">Steel Platelegs (Heavy) (+5 AC)</option>
+            <option value="equipment1">Caster's Robe (Light) (+1 AC)</option>
+            <option value="equipment1"> Steel Breastplate (Heavy) (+5 AC)</option>
+        </select>
+        <br>
+        <br>
+        <input type="submit" value="Delete">
+    </div>
+</form>-->
