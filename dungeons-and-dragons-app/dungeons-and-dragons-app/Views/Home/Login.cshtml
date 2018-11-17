@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+@model LoginViewModel;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login Page</title>
+</head>
+<body>
+
+    <h3>Login Page</h3>
+    @ViewBag.error
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    <table border="0" cellpadding="5" cellspacing="5">
+        <tr>
+            <td>Username:</td>
+            <td>@Html.TextBox("username")</td>
+        </tr>
+
+        <tr>
+            <td>Password:</td>
+            <td>@Html.Password("hashPass")</td>
+        </tr>
+
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="Login"></td>
+        </tr>
+    </table>
+}
+</body>
+</html>
