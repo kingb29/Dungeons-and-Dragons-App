@@ -53,7 +53,7 @@ namespace dungeons_and_dragons_app.Controllers
                     
                 }
             }
-                ViewBag.error = "Invalid Account";
+                ViewBag.error = "Invalid Login Credentials";
                 return View("~/Views/Home/Login.cshtml");
         }
 

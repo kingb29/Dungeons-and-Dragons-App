@@ -2,6 +2,11 @@
     ViewData["Title"] = "Login";
 }
 
+@section Styles {
+    <link href="@Url.Content("~/css/site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/login.css")" rel="stylesheet" type="text/css" />
+}
+
 @model LoginViewModel;
 <!DOCTYPE html>
 
@@ -12,7 +17,7 @@
 </head>
 <body>
 
-    <h3>Login Page</h3>
+    <h3>Login</h3>
     @ViewBag.error
     @using (Html.BeginForm("Login", "Account", FormMethod.Post))
 {
@@ -32,6 +37,16 @@
             <td><input type="submit" value="Login"></td>
         </tr>
     </table>
+
+    <div class="create-acc-div">
+
+        <p>Welcome to the Dungeons and Dragons Companion App!</p>
+        <p>Please Login if you already have an account, otherwise please <a asp-area="" asp-controller="Home" asp-action="CreateAccount">Sign Up</a>.</p>
+    </div>
+
+    <div class="char-div-picture">
+        <img src="~/images/dndlogo.jpg" />
+    </div>
 }
 </body>
 </html>
