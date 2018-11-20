@@ -31,9 +31,14 @@ namespace dungeons_and_dragons_app
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddSession(options=>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10); // ends session after 10 minutes of inactivity
+            });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton(Configuration.GetSection("AppSettings").Get<AppSetting>());
+            services.AddHttpContextAccessor();
+            services.AddTransient<SessionUtility>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +55,7 @@ namespace dungeons_and_dragons_app
             }
 
             app.UseHttpsRedirection();
+            app.UseSession();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 

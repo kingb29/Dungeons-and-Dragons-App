@@ -11,9 +11,8 @@ public class Race
         name = "";
         features = new int[0];
 	}
-    public Race(string nameIn, int[] featuresIn)
+    public Race(string nameIn)
     {
         this.name = nameIn;
-        this.features = featuresIn;
     }
 }

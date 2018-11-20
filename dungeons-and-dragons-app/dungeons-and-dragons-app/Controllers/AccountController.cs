@@ -12,17 +12,20 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+
 
 namespace dungeons_and_dragons_app.Controllers
 {
     public class AccountController : Controller
     {
         private readonly string connectionString;
-        
+        private readonly AppSetting appSetting;
 
-        public AccountController(AppSetting appSetting)
+        public AccountController(AppSetting appSettingIn)
         {
-            connectionString = appSetting.ConnectionString;
+            connectionString = appSettingIn.ConnectionString;
+            appSetting = appSettingIn;
         }
 
         [HttpPost]
@@ -35,19 +38,20 @@ namespace dungeons_and_dragons_app.Controllers
                     try
                     {
                         connection.Open();
-                        string query = "SELECT `HashPass`, `Username` FROM `User` WHERE username = @username and hashPass=@hashPass";
+                        string query = "SELECT `UserID`, `Username` FROM `User` WHERE username = @username and hashPass=@hashPass";
                         MySqlCommand command = new MySqlCommand(query, connection);
                         command.Parameters.AddWithValue("@username", username);
                         command.Parameters.AddWithValue("@hashPass", hashPass);
-                        var count = command.ExecuteScalar();
-
-                        if (count != null) // test if correct login details
+                        MySqlDataReader dr = command.ExecuteReader();
+                        while(dr.Read())
                         {
-                            // do stuff to make the user "signed in"
-                            return View("~/Views/Home/Index.cshtml");
+                            
+                            HttpContext.Session.SetString("UserID", dr["UserID"].ToString());
+                            HttpContext.Session.SetString("Username", dr["UserName"].ToString());
                         }
-
                         connection.Close();
+                        return RedirectToAction("Dashboard", "Home");
+  
                     }
                     catch (MySqlException e)
                     {
