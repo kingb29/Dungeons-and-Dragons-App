@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using dungeons_and_dragons_app.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,10 +15,22 @@ namespace dungeons_and_dragons_app.Controllers
     public class HomeController : Controller
     {
         private readonly string connectionString;
+        private readonly AppSetting appSetting;
+        private readonly SessionUtility sessionUtility;
 
-        public HomeController(AppSetting appSetting)
+        public HomeController(AppSetting appSetting, SessionUtility sessionUtility)
         {
             connectionString = appSetting.ConnectionString;
+            this.appSetting = appSetting;
+            this.sessionUtility = sessionUtility;
+
+        }
+
+        public IActionResult Dashboard()
+        {
+            DataObj dbo = new DataObj(appSetting, sessionUtility);
+            List<Character> characters = dbo.getCharactersFromUserId();
+            return View(characters);
         }
 
         public IActionResult Index()
