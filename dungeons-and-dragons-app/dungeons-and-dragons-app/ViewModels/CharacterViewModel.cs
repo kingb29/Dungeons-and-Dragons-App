@@ -29,7 +29,6 @@ public class CharacterViewModel
 
     public CharacterViewModel()
     {
-
     }
 
     public CharacterViewModel(IEnumerable<SelectListItem> racesIn, IEnumerable<SelectListItem> classesIn,

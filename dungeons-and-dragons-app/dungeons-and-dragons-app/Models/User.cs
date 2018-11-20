@@ -1,22 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 
 public class User
 {
     public string username { get; set; }
     public int databaseID { get; set; }
-    public int[] characterSheetIDs { get; set; }
+    public List<Character> characters { get; set; }
 
     public User()
 	{
         username = "";
         databaseID = 0;
-        characterSheetIDs = new int[0];
 	}
-    public User(string usernameIn, int databaseIDIn, int[] characterSheetIDsIn)
+    public User(AppSetting appSetting, SessionUtility sessionUtility)
     {
-        this.username = usernameIn;
-        this.databaseID = databaseIDIn;
-        this.characterSheetIDs = characterSheetIDsIn;
     }
     
 }
