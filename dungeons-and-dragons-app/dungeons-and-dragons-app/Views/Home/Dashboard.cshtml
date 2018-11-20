@@ -7,8 +7,7 @@
 <ul>
     @foreach(var character in Model) {
     <div>
-        @character.name<br />
-        @character.charClass @character.level
+        @Html.ActionLink(@character.name + "-" + @character.charClass + " " + @character.level, "Index", new { @character.id })
     </div>
     }
 </ul>

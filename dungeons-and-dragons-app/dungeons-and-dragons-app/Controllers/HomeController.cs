@@ -28,14 +28,28 @@ namespace dungeons_and_dragons_app.Controllers
 
         public IActionResult Dashboard()
         {
-            DataObj dbo = new DataObj(appSetting, sessionUtility);
-            List<Character> characters = dbo.getCharactersFromUserId();
-            return View(characters);
+            if (HttpContext.Session.GetString("UserID") == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                DataObj dbo = new DataObj(appSetting, sessionUtility);
+                List<Character> characters = dbo.getCharactersFromUserId();
+                return View(characters);
+            } 
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id)
         {
-            return View();
+            if (HttpContext.Session.GetString("UserID") == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public IActionResult About()
@@ -47,139 +61,34 @@ namespace dungeons_and_dragons_app.Controllers
 
         public IActionResult CharacterCreation()
         {
-            ViewData["Message"] = "Create a character";
-
-            // RACE LIST
-            List<Race> races = new List<Race>();
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            if (HttpContext.Session.GetString("UserID") == null)
             {
-                try
-                {
-                    connection.Open();
-                    string query = "SELECT * FROM Race";
-                    MySqlCommand cmd = new MySqlCommand(query, connection);
-                    MySqlDataReader dr = cmd.ExecuteReader();
-                    while (dr.Read())
-                    {
-                        Race race = new Race();
-                        race.id = Int32.Parse(dr["RaceID"].ToString());
-                        race.name = dr["RaceName"].ToString();
-                        races.Add(race);
-                    }
-                    connection.Close();
-                }
-                catch (MySqlException e)
-                {
-                    Console.Write(e);
-                }
+                return RedirectToAction("Login", "Home");
             }
-            IEnumerable<SelectListItem> raceList = new SelectList(races, "id", "name");
-
-            // CLASS LIST
-            List<CharacterClass> classes = new List<CharacterClass>();
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            else
             {
-                try
-                {
-                    connection.Open();
-                    string query = "SELECT * FROM Class";
-                    MySqlCommand cmd = new MySqlCommand(query, connection);
-                    MySqlDataReader dr = cmd.ExecuteReader();
-                    while (dr.Read())
-                    {
-                        CharacterClass charClass = new CharacterClass();
-                        charClass.id = Int32.Parse(dr["ClassID"].ToString());
-                        charClass.name = dr["ClassName"].ToString();
-                        classes.Add(charClass);
-                    }
-                    connection.Close();
-                }
-                catch (MySqlException e)
-                {
-                    Console.Write(e);
-                }
-            }
-            IEnumerable<SelectListItem> classList = new SelectList(classes, "id", "name");
+                ViewData["Message"] = "Create a character";
 
-            // ALIGNMENT LIST
-            List<Alignment> alignments = new List<Alignment>();
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    string query = "SELECT * FROM Alignment";
-                    MySqlCommand cmd = new MySqlCommand(query, connection);
-                    MySqlDataReader dr = cmd.ExecuteReader();
-                    while (dr.Read())
-                    {
-                        Alignment alignment = new Alignment();
-                        alignment.id = Int32.Parse(dr["AlignmentID"].ToString());
-                        alignment.name = dr["AlignmentName"].ToString();
-                        alignments.Add(alignment);
-                    }
-                    connection.Close();
-                }
-                catch (MySqlException e)
-                {
-                    Console.Write(e);
-                }
-            }
-            IEnumerable<SelectListItem> alignmentList = new SelectList(alignments, "id", "name");
+                DataObj dbo = new DataObj(appSetting, sessionUtility);
 
-            // weapons
-            List<Weapon> weapons = new List<Weapon>();
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    string query = "SELECT * FROM Weapons";
-                    MySqlCommand cmd = new MySqlCommand(query, connection);
-                    MySqlDataReader dr = cmd.ExecuteReader();
-                    while (dr.Read())
-                    {
-                        Weapon weapon = new Weapon();
-                        weapon.id = Int32.Parse(dr["WeaponID"].ToString());
-                        weapon.name = dr["WeaponName"].ToString();
-                        weapons.Add(weapon);
-                    }
-                    connection.Close();
-                }
-                catch (MySqlException e)
-                {
-                    Console.Write(e);
-                }
-            }
-            IEnumerable<SelectListItem> weaponList = new SelectList(weapons, "id", "name");
+                // RACE LIST
+                IEnumerable<SelectListItem> raceList = new SelectList(dbo.getAllRaces(), "id", "name");
 
-            List<Spell> spells = new List<Spell>();
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    string query = "SELECT * FROM Spells";
-                    MySqlCommand cmd = new MySqlCommand(query, connection);
-                    MySqlDataReader dr = cmd.ExecuteReader();
-                    while (dr.Read())
-                    {
-                        Spell spell = new Spell();
-                        spell.id = Int32.Parse(dr["SpellID"].ToString());
-                        spell.name = dr["SpellName"].ToString();
-                        spells.Add(spell);
-                    }
-                    connection.Close();
-                }
-                catch (MySqlException e)
-                {
-                    Console.Write(e);
-                }
-            }
-            IEnumerable<SelectListItem> spellList = new SelectList(spells, "id", "name");
+                // CLASS LIST
+                IEnumerable<SelectListItem> classList = new SelectList(dbo.getAllClasses(), "id", "name");
 
-            CharacterViewModel characterViewModel = new CharacterViewModel(raceList, classList, alignmentList, weaponList, spellList);
-            return View(characterViewModel);
+                // ALIGNMENT LIST
+                IEnumerable<SelectListItem> alignmentList = new SelectList(dbo.getAllAlignments(), "id", "name");
+
+                // WEAPON LIST
+                IEnumerable<SelectListItem> weaponList = new SelectList(dbo.getAllWeapons(), "id", "name");
+
+                // SPELL LIST
+                IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
+
+                CharacterViewModel characterViewModel = new CharacterViewModel(raceList, classList, alignmentList, weaponList, spellList);
+                return View(characterViewModel);
+            }
         }
 
         [HttpPost]
