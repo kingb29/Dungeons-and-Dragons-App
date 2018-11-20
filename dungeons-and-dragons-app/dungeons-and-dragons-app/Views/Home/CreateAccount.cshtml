@@ -1,7 +1,61 @@
 ﻿
-@{
-    ViewData["Title"] = "createAccount";
+@section Styles {
+    <link href="@Url.Content("~/css/site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/css/createAccount.css")" rel="stylesheet" type="text/css" />
 }
+<!DOCTYPE html>
+<html>
+<head>
 
-<h2>createAccount</h2>
+</head>
+<body>
+
+    @ViewBag.error
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+    {
+    <table border="0" cellpadding="5" cellspacing="5">
+        <h3>Create an Account</h3>
+        <tr>
+            <td>Email:</td>
+            <td>@Html.TextBox("email")</td>
+        </tr>
+        <tr>
+            <td>Username:</td>
+            <td>@Html.TextBox("username")</td>
+        </tr>
+
+        <tr>
+            <td>Password:</td>
+            <td>@Html.Password("password")</td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Create Account"></td>
+        </tr>
+    </table>
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
+
 
