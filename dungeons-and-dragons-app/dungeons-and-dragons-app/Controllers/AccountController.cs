@@ -44,7 +44,7 @@ namespace dungeons_and_dragons_app.Controllers
                         {
                             
                             HttpContext.Session.SetString("UserID", dr["UserID"].ToString());
-                            HttpContext.Session.SetString("Username", dr["UserName"].ToString());
+                            HttpContext.Session.SetString("Username", dr["Username"].ToString());
                         }
                         connection.Close();
                         return RedirectToAction("Dashboard", "Home");
