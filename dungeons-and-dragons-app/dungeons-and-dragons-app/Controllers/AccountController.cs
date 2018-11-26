@@ -31,31 +31,68 @@ namespace dungeons_and_dragons_app.Controllers
         [HttpPost]
         public IActionResult Login(string username, string hashPass)
         {
+            String hashedPass = "";
+            String salt = "";
+            int userID = 0;
+
             if (username != null && hashPass != null)
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    try
+                    try // first connection checks to see if the username exists inside of the database
                     {
+                        
                         connection.Open();
-                        string query = "SELECT `UserID`, `Username` FROM `User` WHERE username = @username and hashPass=@hashPass";
+                        string query = "SELECT 'Username' FROM `User` WHERE Username = @Username";
                         MySqlCommand command = new MySqlCommand(query, connection);
-                        command.Parameters.AddWithValue("@username", username);
-                        command.Parameters.AddWithValue("@hashPass", hashPass);
-                        MySqlDataReader dr = command.ExecuteReader();
-                        while(dr.Read())
+                        command.Parameters.AddWithValue("@Username", username);
+                        var count = command.ExecuteScalar();
+                        if (count != null) // if true the username exists in the database and we can continue to check if the password matches
                         {
+                            connection.Close();
+                            connection.Open();
+                            query = "SELECT * FROM `User` WHERE  Username = '" + username + "'";
+                            MySqlCommand command2 = new MySqlCommand(query, connection);
+                            command2.Parameters.AddWithValue("@Username", username);
+                            MySqlDataReader reader = command2.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                salt = reader["Salt"].ToString();
+                                hashedPass = reader["HashPass"].ToString();
+                                userID = Convert.ToInt32(reader["UserID"]);
+                            }
+
+                            bool access = areEqual(hashPass, hashedPass, salt);
+
+                            if (access) // if the user information is correct
+                            {
+                                // do things to log in user
+                                HttpContext.Session.SetString("UserID", userID.ToString());
+                                HttpContext.Session.SetString("Username", username);
                             
-                            HttpContext.Session.SetString("UserID", dr["UserID"].ToString());
-                            HttpContext.Session.SetString("Username", dr["Username"].ToString());
+                                connection.Close();
+                                return RedirectToAction("Dashboard", "Home");
                         }
-                        connection.Close();
-                        return RedirectToAction("Dashboard", "Home");
-  
+                            else
+                            {
+                                connection.Close();
+                                ViewBag.error = "Invalid Login Credentials";
+                                return View("~/Views/Home/Login.cshtml");
+                            }
+                        }
+                        else // the username doesn't exists within the database and the user with have to re-enter information
+                        {
+                            connection.Close();
+                            ViewBag.error = "Invalid Login Credentials";
+                            return View("~/Views/Home/Login.cshtml");
+
+                        }
                     }
                     catch (MySqlException e)
                     {
-                        Console.Write(e);
+                        ViewBag.error = "Error connecting to server";
+                        return View("~/Views/Home/Login.cshtml");
                     }
                     
                 }
@@ -97,6 +134,7 @@ namespace dungeons_and_dragons_app.Controllers
                         // open new connection for inserting data into the database
                         MySqlConnection connection2 = new MySqlConnection(connectionString);
                         salt = getSalt();
+                        password = generateHash(password,salt);
                         connection2.Open();
                         query = "INSERT INTO `User`(`Salt`, `HashPass`, `Username`, `Email`) VALUES(@salt,@hashPass,@username,@email)";
                         MySqlCommand command2 = new MySqlCommand(query, connection2);
@@ -121,7 +159,7 @@ namespace dungeons_and_dragons_app.Controllers
             }
         }
 
-        private static String getSalt()
+        private static String getSalt() // creates the original salt for the account when it is registered
         {
             var random = new RNGCryptoServiceProvider();
 
@@ -134,6 +172,21 @@ namespace dungeons_and_dragons_app.Controllers
             return Convert.ToBase64String(salt);
         }
 
+        public string generateHash(string password, string salt) // generates a hashed password for the user with the randomly generated salt
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(password + salt);
+            SHA256Managed sHA256ManagedString = new SHA256Managed();
+            byte[] hash = sHA256ManagedString.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
+        }
+
+        public bool areEqual(string password, string hashedPass, string salt) // compares the users input hashed with the hash already inside the database
+        {
+            string newHashedPin = generateHash(password, salt);
+            return newHashedPin.Equals(hashedPass);
+        }
+
+
         [Route("logout")]
         [HttpGet]
         public IActionResult Logout()
@@ -144,3 +197,28 @@ namespace dungeons_and_dragons_app.Controllers
 
     }
 }
+
+
+/*
+
+string query = "SELECT `UserID`, `Username` FROM `User` WHERE username = @username and hashPass=@hashPass";
+MySqlCommand command = new MySqlCommand(query, connection);
+command.Parameters.AddWithValue("@username", username);
+                        command.Parameters.AddWithValue("@hashPass", hashPass);
+                        MySqlDataReader dr = command.ExecuteReader();
+                        while(dr.Read())
+                        {
+                            
+                            HttpContext.Session.SetString("UserID", dr["UserID"].ToString());
+                            HttpContext.Session.SetString("Username", dr["Username"].ToString());
+                        }
+                        connection.Close();
+                        return RedirectToAction("Dashboard", "Home");
+  
+                    }
+                    catch (MySqlException e)
+                    {
+                        Console.Write(e);
+                    }
+
+    */
