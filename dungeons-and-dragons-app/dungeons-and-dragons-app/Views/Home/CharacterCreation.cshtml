@@ -13,75 +13,75 @@
 @using (Html.BeginForm("CharacterCreation", "Home", FormMethod.Post))
 {
     <div class="row">
+        <div class="col-xs-12">
+            <div asp-validation-summary="All"></div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-xs-12 col-lg-3">
-            Name:<br>
-            @Html.TextBoxFor(m => m.name)
+            <label for="name" class="strong">Name:</label><br>
+            @Html.TextBoxFor(m => m.name, new {@class = "form-control"})
             <br>
+            <label for="race" class="strong">Race:</label><br>
+            @Html.DropDownListFor(m => m.race, Model.raceList, new { @class = "form-control" })
             <br>
-            Race:<br>
-            @Html.DropDownListFor(m => m.race, Model.raceList)
+            <label for="class" class="strong">Class:</label><br>
+            @Html.DropDownListFor(m => m.charClass, Model.classList, new { @class = "form-control" })
             <br>
+            <label for="level" class="strong">Level:</label><br>
+            @Html.TextBoxFor(m => m.level, new { @class = "form-control" })
             <br>
-            Class:<br>
-            @Html.DropDownListFor(m => m.charClass, Model.classList)
+            <label for="alignment" class="strong">Alignment:</label><br>
+            @Html.DropDownListFor(m => m.alignment, Model.alignmentList, new { @class = "form-control" })
             <br>
-            <br>
-            Level:<br>
-            @Html.TextBoxFor(m => m.level)
-            <br>
-            <br>
-            Alignment:<br>
-            @Html.DropDownListFor(m => m.alignment, Model.alignmentList)
-            <br>
-            <br>
-            Sex:<br>
+            <label for="gender" class="strong">Sex:</label><br>
             <div>
-                @Html.RadioButtonFor(m => m.gender, "Male") Male
-                @Html.RadioButtonFor(m => m.gender, "Female") Female
+                @Html.RadioButtonFor(m => m.gender, "Male", new { @class = "form-control-custom" }) Male
+                @Html.RadioButtonFor(m => m.gender, "Female", new { @class = "form-control-custom" }) Female
             </div>
         </div>
         <div class="col-xs-12 col-lg-3">
-            Strength:<br>
-            @Html.TextBoxFor(m => m.str)
+            <label for="str" class="strong">Strength:</label><br>
+            @Html.TextBoxFor(m => m.str, new { @class = "form-control" })
             <br>
+            <label for="con" class="strong">Constitution:</label><br>
+            @Html.TextBoxFor(m => m.con, new { @class = "form-control" })
             <br>
-            Constitution:<br>
-            @Html.TextBoxFor(m => m.con)
+            <label for="dex" class="strong">Dexterity:</label><br>
+            @Html.TextBoxFor(m => m.dex, new { @class = "form-control" })
             <br>
+            <label for="inte" class="strong">Intelligence:</label><br>
+            @Html.TextBoxFor(m => m.inte, new { @class = "form-control" })
             <br>
-            Dexterity:<br>
-            @Html.TextBoxFor(m => m.dex)
+            <label for="wis" class="strong">Wisdom:</label><br>
+            @Html.TextBoxFor(m => m.wis, new { @class = "form-control" })
             <br>
-            <br>
-            Intelligence:<br>
-            @Html.TextBoxFor(m => m.inte)
-            <br>
-            <br>
-            Wisdom:<br>
-            @Html.TextBoxFor(m => m.wis)
-            <br>
-            <br>
-            Charisma:<br>
-            @Html.TextBoxFor(m => m.cha)
-            <br>
+            <label for="cha" class="strong">Charisma:</label><br>
+            @Html.TextBoxFor(m => m.cha, new { @class = "form-control" })
             <br>
         </div>
         <div class="col-xs-12 col-lg-3">
             <div>
-                <strong>Weapons:</strong><br>
-                @Html.DropDownListFor(m => m.weapon, Model.weaponList)
+                <label class="strong">Weapons:</label><br>
+                <div id="weapon-list">
+
+                </div>
+                @Html.DropDownListFor(m => m.weapon, Model.weaponList, new { @class = "form-control" })
                 <br>
-                <input type="submit" value="Add Weapon">
+                <span class="btn btn-default" id="addWeapon" onclick="addWeapon()">Add Weapon</span>
                 <br /><br />
             </div>
             <div>
-                <strong>Spells:</strong><br>
-                @Html.DropDownListFor(m => m.spell, Model.spellList)
+                <label class="strong">Spells:</label><br>
+                <div id="spell-list">
+
+                </div>
+                @Html.DropDownListFor(m => m.spell, Model.spellList, new { @class = "form-control" })
                 <br>
-                <input type="submit" value="Add Spell">
+                <span class="btn btn-default" id="addSpell" onclick="addSpell()">Add Spell</span>
             </div>
-            <br /><br /><br />
-            <input type="submit" value="Create Character">
+            <br />
+            <button type="submit" class="btn btn-success">Create Character</button>
         </div>
         <div class="col-xs-12 col-lg-3 char-div-picture">
             <img src="~/images/dndcharmain2.png" />

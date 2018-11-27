@@ -98,33 +98,97 @@ namespace dungeons_and_dragons_app.Controllers
         [HttpPost]
         public ActionResult CharacterCreation(CharacterViewModel model)
         {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    connection.Open();
-                    string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,RaceID,ClassID,AlignmentID,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,UserID) VALUES(@name,@level,@race,@class,@alignment,@str,@dex,@con,@inte,@wis,@cha,@user)";
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@name", model.name);
-                    command.Parameters.AddWithValue("@race", Convert.ToInt32(model.race));
-                    command.Parameters.AddWithValue("@level", Convert.ToInt32(model.level));
-                    command.Parameters.AddWithValue("@class", Convert.ToInt32(model.charClass));
-                    command.Parameters.AddWithValue("@alignment", Convert.ToInt32(model.alignment));
-                    command.Parameters.AddWithValue("@str", Convert.ToInt32(model.str));
-                    command.Parameters.AddWithValue("@dex", Convert.ToInt32(model.dex));
-                    command.Parameters.AddWithValue("@con", Convert.ToInt32(model.con));
-                    command.Parameters.AddWithValue("@inte", Convert.ToInt32(model.inte));
-                    command.Parameters.AddWithValue("@wis", Convert.ToInt32(model.wis));
-                    command.Parameters.AddWithValue("@cha", Convert.ToInt32(model.cha));
-                    command.Parameters.AddWithValue("@user", HttpContext.Session.GetString("UserID"));
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
-                catch (MySqlException e) {
-                    Console.Write(e);
-                }
+                DataObj dbo = new DataObj(appSetting, sessionUtility);
+
+                // RACE LIST
+                IEnumerable<SelectListItem> raceList = new SelectList(dbo.getAllRaces(), "id", "name");
+
+                // CLASS LIST
+                IEnumerable<SelectListItem> classList = new SelectList(dbo.getAllClasses(), "id", "name");
+
+                // ALIGNMENT LIST
+                IEnumerable<SelectListItem> alignmentList = new SelectList(dbo.getAllAlignments(), "id", "name");
+
+                // WEAPON LIST
+                IEnumerable<SelectListItem> weaponList = new SelectList(dbo.getAllWeapons(), "id", "name");
+
+                // SPELL LIST
+                IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
+
+                ViewData["race"] = raceList;
+                ViewData["charClass"] = classList;
+                ViewData["alignment"] = alignmentList;
+                ViewData["weapon"] = weaponList;
+                ViewData["spell"] = spellList;
+
+                return View("CharacterCreation", model);
             }
-            return RedirectToAction("Index");
+            else
+            {
+
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    try
+                    {
+                        // inserting into character table
+                        connection.Open();
+                        string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,RaceID,ClassID,AlignmentID,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,UserID) VALUES(@name,@level,@race,@class,@alignment,@str,@dex,@con,@inte,@wis,@cha,@user)";
+                        MySqlCommand command = new MySqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@name", model.name);
+                        command.Parameters.AddWithValue("@race", Convert.ToInt32(model.race));
+                        command.Parameters.AddWithValue("@level", Convert.ToInt32(model.level));
+                        command.Parameters.AddWithValue("@class", Convert.ToInt32(model.charClass));
+                        command.Parameters.AddWithValue("@alignment", Convert.ToInt32(model.alignment));
+                        command.Parameters.AddWithValue("@str", Convert.ToInt32(model.str));
+                        command.Parameters.AddWithValue("@dex", Convert.ToInt32(model.dex));
+                        command.Parameters.AddWithValue("@con", Convert.ToInt32(model.con));
+                        command.Parameters.AddWithValue("@inte", Convert.ToInt32(model.inte));
+                        command.Parameters.AddWithValue("@wis", Convert.ToInt32(model.wis));
+                        command.Parameters.AddWithValue("@cha", Convert.ToInt32(model.cha));
+                        command.Parameters.AddWithValue("@user", HttpContext.Session.GetString("UserID"));
+                        command.ExecuteNonQuery();
+
+                        long charId = command.LastInsertedId;
+
+                        // inserting spells 
+                        int[] spells = model.spells;
+
+                        for (int i = 0; i < spells.Length; i++)
+                        {
+                            query = "INSERT INTO CharacterSpells(CharacterID,SpellId) VALUES(@charId,@spellId)";
+                            command = new MySqlCommand(query, connection);
+                            command.Parameters.AddWithValue("@charId", charId);
+                            command.Parameters.AddWithValue("@spellId", Convert.ToInt32(spells[i]));
+                            command.ExecuteNonQuery();
+                        }
+
+                        // inserting weapons
+
+                        int[] weapons = model.weapons;
+
+                        for (int i = 0; i < spells.Length; i++)
+                        {
+                            query = "INSERT INTO CharacterWeapons(CharacterID,WeaponId) VALUES(@charId,@weaponId)";
+                            command = new MySqlCommand(query, connection);
+                            command.Parameters.AddWithValue("@charId", charId);
+                            command.Parameters.AddWithValue("@weaponId", Convert.ToInt32(weapons[i]));
+                            command.ExecuteNonQuery();
+                        }
+
+                        connection.Close();
+
+                        return RedirectToAction("Index", new { id = charId });
+                    }
+                    catch (MySqlException e)
+                    {
+                        Console.Write(e);
+                    }
+                }
+
+                return null;
+            }
         }
 
         public IActionResult Privacy()
