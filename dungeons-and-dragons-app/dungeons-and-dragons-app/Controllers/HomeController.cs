@@ -36,6 +36,10 @@ namespace dungeons_and_dragons_app.Controllers
             {
                 DataObj dbo = new DataObj(appSetting, sessionUtility);
                 List<Character> characters = dbo.getCharactersFromUserId();
+                if (characters.Count == 0)
+                {
+                    return RedirectToAction("CharacterCreation", "Home");
+                }
                 return View(characters);
             } 
         }
@@ -99,7 +103,7 @@ namespace dungeons_and_dragons_app.Controllers
                 try
                 {
                     connection.Open();
-                    string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,RaceID,ClassID,AlignmentID,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma) VALUES(@name,@level,@race,@class,@alignment,@str,@dex,@con,@inte,@wis,@cha)";
+                    string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,RaceID,ClassID,AlignmentID,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,UserID) VALUES(@name,@level,@race,@class,@alignment,@str,@dex,@con,@inte,@wis,@cha,@user)";
                     MySqlCommand command = new MySqlCommand(query, connection);
                     command.Parameters.AddWithValue("@name", model.name);
                     command.Parameters.AddWithValue("@race", Convert.ToInt32(model.race));
@@ -112,6 +116,7 @@ namespace dungeons_and_dragons_app.Controllers
                     command.Parameters.AddWithValue("@inte", Convert.ToInt32(model.inte));
                     command.Parameters.AddWithValue("@wis", Convert.ToInt32(model.wis));
                     command.Parameters.AddWithValue("@cha", Convert.ToInt32(model.cha));
+                    command.Parameters.AddWithValue("@user", HttpContext.Session.GetString("UserID"));
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
