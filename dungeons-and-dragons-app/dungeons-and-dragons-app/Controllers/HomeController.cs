@@ -52,7 +52,8 @@ namespace dungeons_and_dragons_app.Controllers
             }
             else
             {
-                return View();
+                Character curChar= new Character(id,appSetting);
+                return View(curChar);
             }
         }
 

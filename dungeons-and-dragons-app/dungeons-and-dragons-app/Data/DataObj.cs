@@ -17,6 +17,11 @@ public class DataObj
         _sessionUtility = sessionUtility;
     }
 
+    public DataObj(AppSetting appSetting)
+    {
+        connectionString = appSetting.ConnectionString;
+    }
+
 
     // Gets list of characters' name/level/class/race to display on dashboard
 
@@ -192,6 +197,99 @@ public class DataObj
                 }
                 connection.Close();
                 return spells;
+            }
+            catch (MySqlException e)
+            {
+                Console.Write(e);
+                return null;
+            }
+        }
+    }
+
+    public Character pullCharInfoById(int id) // creates and returns a character from the database based on character ID
+    {
+        Character temp = new Character(); // the character to return 
+
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            try
+            {
+                connection.Open();
+                string query = "SELECT * FROM `CharacterTable` " +
+                    "INNER JOIN `Race` ON Race.RaceID = CharacterTable.RaceID INNER JOIN `Class` ON Class.ClassID = " +
+                    "CharacterTable.ClassID INNER JOIN `Alignment` ON Alignment.AlignmentID = CharacterTable.AlignmentID WHERE CharacterID = @id";
+
+
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.Add(new MySqlParameter("@id", id));
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    temp.name = dr["CharacterName"].ToString();
+                    temp.level = Int32.Parse(dr["CharacterLevel"].ToString());
+                    temp.race = dr["RaceName"].ToString();
+                    temp.charClass = dr["ClassName"].ToString();
+                    temp.str = Int32.Parse(dr["Strength"].ToString());
+                    temp.dex = Int32.Parse(dr["Dexterity"].ToString());
+                    temp.con = Int32.Parse(dr["Constitution"].ToString());
+                    temp.inte = Int32.Parse(dr["Intelligence"].ToString());
+                    temp.wis = Int32.Parse(dr["Wisdom"].ToString());
+                    temp.cha = Int32.Parse(dr["Charisma"].ToString());
+                    temp.alignment = dr["AlignmentName"].ToString();
+                    temp.gender = dr["Gender"].ToString();
+                }
+               
+                // code to set gender to actual gender
+                if (temp.gender.Equals("0"))
+                {
+                    temp.gender = "Male";
+                }
+                else
+                {
+                    temp.gender = "Female";
+                }
+
+                connection.Close();
+                connection.Open();
+                // code to grab the character weapons from the database with the characterID
+                query = "SELECT `SpellName`, `SpellDamage` FROM `CharacterSpells` " +
+                    "INNER JOIN `Spells` ON Spells.SpellID = CharacterSpells.SpellID WHERE CharacterID = @id";
+                cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.Add(new MySqlParameter("@id", id));
+                dr = cmd.ExecuteReader();
+                List<Spell> spells = new List<Spell>();
+                while (dr.Read())
+                {
+                    Spell spell = new Spell();
+                    spell.damage = dr["SpellDamage"].ToString();
+                    spell.name = dr["SpellName"].ToString();
+                    spells.Add(spell);
+                }
+
+                temp.spells = spells;
+
+                connection.Close();
+                connection.Open();
+                // code to grab the character weapons from the database with the characterID
+                query = "SELECT `WeaponName`, `WeaponDamage` FROM `CharacterWeapons` " +
+                    "INNER JOIN `Weapons` ON Weapons.WeaponID = CharacterWeapons.WeaponID WHERE CharacterID = @id";
+                cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.Add(new MySqlParameter("@id", id));
+                dr = cmd.ExecuteReader();
+                List<Weapon> weapons = new List<Weapon>();
+                while (dr.Read())
+                {
+                    Weapon weapon = new Weapon();
+                    weapon.name = dr["WeaponName"].ToString();
+                    weapons.Add(weapon);
+                }
+
+                temp.weapons = weapons;
+
+
+                connection.Close();
+
+                return temp;
             }
             catch (MySqlException e)
             {
