@@ -165,3 +165,8 @@
     font-family: 'Acme', sans-serif;
     font-size: 20px;
 }
+
+.char-div-text span:hover {
+    color:blue;
+    cursor: default;
+}

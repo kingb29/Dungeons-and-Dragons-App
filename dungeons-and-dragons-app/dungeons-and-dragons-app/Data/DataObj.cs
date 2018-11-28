@@ -281,6 +281,7 @@ public class DataObj
                 {
                     Weapon weapon = new Weapon();
                     weapon.name = dr["WeaponName"].ToString();
+                    weapon.damage = Int32.Parse(dr["WeaponDamage"].ToString());
                     weapons.Add(weapon);
                 }
 
