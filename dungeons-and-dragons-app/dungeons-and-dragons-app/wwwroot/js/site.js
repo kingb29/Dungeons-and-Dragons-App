@@ -19,3 +19,6 @@ function addSpell() {
     $('#spell option[value="' + spellId + '"]').remove();
 }
 
+function roll(sides) {
+    alert("You roll a 1d" + sides + ": " + (Math.floor(Math.random() * sides) + 1));
+}

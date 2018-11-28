@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html>
 <head>
     @RenderSection("Styles", required: false)
@@ -31,10 +33,17 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Dashboard">Characters</a></li>       
-                    <li><a asp-area="" asp-controller="Home" asp-action="CharacterCreation">Create Character</a></li>        
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">Account</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Login">Login</a></li>
+                    @if (HttpContextAccessor.HttpContext.Session.GetString("UserID") != null)
+                    {
+                        <li><a asp-area="" asp-controller="Home" asp-action="Dashboard">Characters</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="CharacterCreation">Create Character</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">Account</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                    }
+                    else
+                    {
+                        <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li>
+                    }
                 </ul>
             </div>
         </div>

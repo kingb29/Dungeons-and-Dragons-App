@@ -14,7 +14,6 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 
-
 namespace dungeons_and_dragons_app.Controllers
 {
     public class AccountController : Controller
@@ -191,7 +190,10 @@ namespace dungeons_and_dragons_app.Controllers
         [HttpGet]
         public IActionResult Logout()
         {
-            return RedirectToAction("Index");
+            HttpContext.Session.Remove("UserID");
+            HttpContext.Session.Remove("Username");
+
+            return RedirectToAction("Login", "Home");
         }
 
 

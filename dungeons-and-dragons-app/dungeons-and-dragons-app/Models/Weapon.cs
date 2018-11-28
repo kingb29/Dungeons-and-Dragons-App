@@ -3,6 +3,7 @@
 public class Weapon
 {
     public int id { get; set; }
+    public int damage { get; set; }
     public string name { get; set; }
     public string[] properties { get; set; }
     public bool proficiency { get; set; }
