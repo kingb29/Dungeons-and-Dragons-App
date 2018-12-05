@@ -34,7 +34,7 @@ namespace dungeons_and_dragons_app.Controllers
             String salt = "";
             int userID = 0;
 
-            if (username != null && hashPass != null)
+            if (username != null && hashPass != null) // verify they have met the form requirements
             {
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
@@ -109,7 +109,7 @@ namespace dungeons_and_dragons_app.Controllers
 
             try
             {
-                if (username.Length > 9 && password.Length > 9 && email.Length > 9) // check to make sure the information is long enough
+                if (usernameVerify(username) && passwordVerify(password) && emailVerify(email)) // check to make sure the information is long enough
                 {
                     MySqlConnection connection = new MySqlConnection(connectionString); // check to see if username/email is taken yet
 
@@ -184,7 +184,37 @@ namespace dungeons_and_dragons_app.Controllers
             string newHashedPin = generateHash(password, salt);
             return newHashedPin.Equals(hashedPass);
         }
+        
+        // verifies the username to make sure it meets forms requirements
+        public bool usernameVerify(string username)
+        {
+            if(username.Length > 8) {
+                return true;
+            }
+                return false;
+        }
 
+        // verifies the password to make sure it meets forms requirements
+        public bool passwordVerify(string password)
+        {
+            bool isInt = password.Any(char.IsDigit);
+
+            if (isInt && password.Length > 8)
+            {
+                return true;
+            }
+                return false;
+        }
+
+        // verifies the email to make sure it meets forms requirements
+        public bool emailVerify(string password)
+        {
+            if (password.EndsWith(".com"))
+            {
+                return true;
+            }
+                return false;
+        }
 
         [Route("logout")]
         [HttpGet]
