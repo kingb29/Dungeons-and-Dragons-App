@@ -52,7 +52,7 @@ namespace dungeons_and_dragons_app.Controllers
             }
             else
             {
-                Character curChar= new Character(id,appSetting);
+                Character curChar= new Character(id, appSetting);
                 return View(curChar);
             }
         }
@@ -74,24 +74,22 @@ namespace dungeons_and_dragons_app.Controllers
             {
                 ViewData["Message"] = "Create a character";
 
-                DataObj dbo = new DataObj(appSetting, sessionUtility);
+                CharacterViewModel characterViewModel = new CharacterViewModel(appSetting);
+                return View(characterViewModel);
+            }
+        }
 
-                // RACE LIST
-                IEnumerable<SelectListItem> raceList = new SelectList(dbo.getAllRaces(), "id", "name");
+        public IActionResult CharacterEdit(int id)
+        {
+            if (HttpContext.Session.GetString("UserID") == null)
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                ViewData["Message"] = "Edit a character";
 
-                // CLASS LIST
-                IEnumerable<SelectListItem> classList = new SelectList(dbo.getAllClasses(), "id", "name");
-
-                // ALIGNMENT LIST
-                IEnumerable<SelectListItem> alignmentList = new SelectList(dbo.getAllAlignments(), "id", "name");
-
-                // WEAPON LIST
-                IEnumerable<SelectListItem> weaponList = new SelectList(dbo.getAllWeapons(), "id", "name");
-
-                // SPELL LIST
-                IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
-
-                CharacterViewModel characterViewModel = new CharacterViewModel(raceList, classList, alignmentList, weaponList, spellList);
+                CharacterViewModel characterViewModel = new CharacterViewModel(id, appSetting);
                 return View(characterViewModel);
             }
         }
@@ -128,68 +126,107 @@ namespace dungeons_and_dragons_app.Controllers
             }
             else
             {
-
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                DataObj dbo = new DataObj(appSetting, sessionUtility);
+                long charId = dbo.createCharacter(model);
+                if (charId != -1)
                 {
-                    try
-                    {
-                        // inserting into character table
-                        connection.Open();
-                        string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,RaceID,ClassID,AlignmentID,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,UserID) VALUES(@name,@level,@race,@class,@alignment,@str,@dex,@con,@inte,@wis,@cha,@user)";
-                        MySqlCommand command = new MySqlCommand(query, connection);
-                        command.Parameters.AddWithValue("@name", model.name);
-                        command.Parameters.AddWithValue("@race", Convert.ToInt32(model.race));
-                        command.Parameters.AddWithValue("@level", Convert.ToInt32(model.level));
-                        command.Parameters.AddWithValue("@class", Convert.ToInt32(model.charClass));
-                        command.Parameters.AddWithValue("@alignment", Convert.ToInt32(model.alignment));
-                        command.Parameters.AddWithValue("@str", Convert.ToInt32(model.str));
-                        command.Parameters.AddWithValue("@dex", Convert.ToInt32(model.dex));
-                        command.Parameters.AddWithValue("@con", Convert.ToInt32(model.con));
-                        command.Parameters.AddWithValue("@inte", Convert.ToInt32(model.inte));
-                        command.Parameters.AddWithValue("@wis", Convert.ToInt32(model.wis));
-                        command.Parameters.AddWithValue("@cha", Convert.ToInt32(model.cha));
-                        command.Parameters.AddWithValue("@user", HttpContext.Session.GetString("UserID"));
-                        command.ExecuteNonQuery();
-
-                        long charId = command.LastInsertedId;
-
-                        // inserting spells 
-                        int[] spells = model.spells;
-
-                        for (int i = 0; i < spells.Length; i++)
-                        {
-                            query = "INSERT INTO CharacterSpells(CharacterID,SpellId) VALUES(@charId,@spellId)";
-                            command = new MySqlCommand(query, connection);
-                            command.Parameters.AddWithValue("@charId", charId);
-                            command.Parameters.AddWithValue("@spellId", Convert.ToInt32(spells[i]));
-                            command.ExecuteNonQuery();
-                        }
-
-                        // inserting weapons
-
-                        int[] weapons = model.weapons;
-
-                        for (int i = 0; i < spells.Length; i++)
-                        {
-                            query = "INSERT INTO CharacterWeapons(CharacterID,WeaponId) VALUES(@charId,@weaponId)";
-                            command = new MySqlCommand(query, connection);
-                            command.Parameters.AddWithValue("@charId", charId);
-                            command.Parameters.AddWithValue("@weaponId", Convert.ToInt32(weapons[i]));
-                            command.ExecuteNonQuery();
-                        }
-
-                        connection.Close();
-
-                        return RedirectToAction("Index", new { id = charId });
-                    }
-                    catch (MySqlException e)
-                    {
-                        Console.Write(e);
-                    }
+                    return RedirectToAction("Index", new { id = charId });
                 }
+                else
+                {
+                    // RACE LIST
+                    IEnumerable<SelectListItem> raceList = new SelectList(dbo.getAllRaces(), "id", "name");
 
-                return null;
+                    // CLASS LIST
+                    IEnumerable<SelectListItem> classList = new SelectList(dbo.getAllClasses(), "id", "name");
+
+                    // ALIGNMENT LIST
+                    IEnumerable<SelectListItem> alignmentList = new SelectList(dbo.getAllAlignments(), "id", "name");
+
+                    // WEAPON LIST
+                    IEnumerable<SelectListItem> weaponList = new SelectList(dbo.getAllWeapons(), "id", "name");
+
+                    // SPELL LIST
+                    IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
+
+                    ViewData["race"] = raceList;
+                    ViewData["charClass"] = classList;
+                    ViewData["alignment"] = alignmentList;
+                    ViewData["weapon"] = weaponList;
+                    ViewData["spell"] = spellList;
+
+                    return View("CharacterCreation", model);
+                }
             }
+                
+        }
+
+        [HttpPost]
+        public ActionResult CharacterEdit(CharacterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                DataObj dbo = new DataObj(appSetting, sessionUtility);
+
+                // RACE LIST
+                IEnumerable<SelectListItem> raceList = new SelectList(dbo.getAllRaces(), "id", "name");
+
+                // CLASS LIST
+                IEnumerable<SelectListItem> classList = new SelectList(dbo.getAllClasses(), "id", "name");
+
+                // ALIGNMENT LIST
+                IEnumerable<SelectListItem> alignmentList = new SelectList(dbo.getAllAlignments(), "id", "name");
+
+                // WEAPON LIST
+                IEnumerable<SelectListItem> weaponList = new SelectList(dbo.getAllWeapons(), "id", "name");
+
+                // SPELL LIST
+                IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
+
+                ViewData["race"] = raceList;
+                ViewData["charClass"] = classList;
+                ViewData["alignment"] = alignmentList;
+                ViewData["weapon"] = weaponList;
+                ViewData["spell"] = spellList;
+
+                return View("CharacterEdit", model);
+            }
+            else
+            {
+                DataObj dbo = new DataObj(appSetting, sessionUtility);
+
+                long charId = dbo.editCharacter(model);
+                if (charId != -1)
+                {
+                    return RedirectToAction("Index", new { id = charId });
+                }
+                else
+                {
+                    // RACE LIST
+                    IEnumerable<SelectListItem> raceList = new SelectList(dbo.getAllRaces(), "id", "name");
+
+                    // CLASS LIST
+                    IEnumerable<SelectListItem> classList = new SelectList(dbo.getAllClasses(), "id", "name");
+
+                    // ALIGNMENT LIST
+                    IEnumerable<SelectListItem> alignmentList = new SelectList(dbo.getAllAlignments(), "id", "name");
+
+                    // WEAPON LIST
+                    IEnumerable<SelectListItem> weaponList = new SelectList(dbo.getAllWeapons(), "id", "name");
+
+                    // SPELL LIST
+                    IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
+
+                    ViewData["race"] = raceList;
+                    ViewData["charClass"] = classList;
+                    ViewData["alignment"] = alignmentList;
+                    ViewData["weapon"] = weaponList;
+                    ViewData["spell"] = spellList;
+
+                    return View("CharacterEdit", model);
+                }
+            }
+
         }
 
         public IActionResult Privacy()

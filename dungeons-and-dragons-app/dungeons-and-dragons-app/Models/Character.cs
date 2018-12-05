@@ -11,11 +11,11 @@ public class Character
     public int inte { get; set; }
     public int wis { get; set; }
     public int cha { get; set; }
-    public string race { get; set; }
+    public Race race { get; set; }
     public string gender { get; set; }
     public int level { get; set; }
-    public string charClass { get; set; }
-    public string alignment { get; set; }
+    public CharacterClass charClass { get; set; }
+    public Alignment alignment { get; set; }
     public List<Weapon> weapons { get; set; }
     public List<Spell> spells { get; set; }
 
@@ -25,6 +25,9 @@ public class Character
         id = 0;
         //charAttributes = new CharacterAttribute[0];
         gender = "";
+        alignment = new Alignment();
+        race = new Race();
+        charClass = new CharacterClass();
         weapons = new List<Weapon>();
         spells = new List<Spell>();
 	}

@@ -3,14 +3,14 @@
 }
 
 @{
-    ViewData["Title"] = "Create a Character";
+    ViewData["Title"] = "Edit Your Character";
 }
 
 @model CharacterViewModel;
 
 <h2>@ViewData["Title"]</h2>
 
-@using (Html.BeginForm("CharacterCreation", "Home", FormMethod.Post))
+@using (Html.BeginForm("CharacterEdit", "Home", FormMethod.Post))
 {
     <div class="row">
         <div class="col-xs-12">
@@ -36,8 +36,8 @@
             <br>
             <label for="gender" class="strong">Sex:</label><br>
             <div>
-                @Html.RadioButtonFor(m => m.gender, "Male", new { @class = "form-control-custom" }) Male
-                @Html.RadioButtonFor(m => m.gender, "Female", new { @class = "form-control-custom" }) Female
+                @Html.RadioButtonFor(m => m.gender, "Male", new { @id = "Male", @class = "form-control-custom" }) Male
+                @Html.RadioButtonFor(m => m.gender, "Female", new { @id = "Female", @class = "form-control-custom" }) Female
             </div>
         </div>
         <div class="col-xs-12 col-lg-3">
@@ -64,7 +64,14 @@
             <div>
                 <label class="strong">Weapons:</label><br>
                 <div id="weapon-list">
-
+                    @foreach(var weapon in Model.weapons)
+                    {
+                    <div class='weapon-list-item'>
+                        <label class='spell'>@weapon.name</label>
+                        <input type='text' class='hidden' name='weaponInputs' value="@weapon.id">
+                        <span onclick='removeWeapon(this)' class='glyphicon glyphicon-remove weapon-remove'></span> <br>
+                    </div>
+                    }
                 </div>
                 @Html.DropDownListFor(m => m.weapon, Model.weaponList, new { @class = "form-control" })
                 <br>
@@ -74,6 +81,14 @@
             <div>
                 <label class="strong">Spells:</label><br>
                 <div id="spell-list">
+                    @foreach(var spell in Model.spells)
+                    {
+                    <div class='spell-list-item'>
+                        <label class='spell'>@spell.name</label>
+                        <input type='text' class='hidden' name='spellInputs' value="@spell.id">
+                        <span onclick='removeSpell(this)' class='glyphicon glyphicon-remove spell-remove'></span> <br>
+                    </div>
+                    }
 
                 </div>
                 @Html.DropDownListFor(m => m.spell, Model.spellList, new { @class = "form-control" })
@@ -81,10 +96,21 @@
                 <span class="btn btn-default" id="addSpell" onclick="addSpell()">Add Spell</span>
             </div>
             <br />
-            <button type="submit" class="btn btn-success">Create Character</button>
+            <button type="submit" class="btn btn-success">Save Character</button>
         </div>
         <div class="col-xs-12 col-lg-3 char-div-picture">
             <img src="~/images/dndcharmain2.png" />
         </div>
     </div>
 }
+
+<script>
+    var element = document.getElementById('race');
+    element.selectedIndex = @Model.race.id - 1;
+
+    element = document.getElementById('charClass');
+    element.selectedIndex = @Model.charClass.id - 1;
+
+    element = document.getElementById('alignment');
+    element.selectedIndex = @Model.alignment.id - 1;
+</script>
