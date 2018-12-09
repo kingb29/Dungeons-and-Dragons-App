@@ -3,11 +3,21 @@
     ViewData["Title"] = "Dashboard";
 }
 @model List<Character>;
-<h2>Dashboard</h2>
-<ul>
-    @foreach(var character in Model) {
-    <div>
-        @Html.ActionLink(@character.name + "-" + @character.charClass + " " + @character.level, "Index", new { @character.id })
+<h1>Dashboard</h1>
+<div class="container">
+    <div class="row">
+        @foreach (var character in Model)
+        {
+            <div class="col-xs-8">
+                @Html.ActionLink(@character.name + "-" + @character.race.name + " " + @character.charClass.name + " " +
+               @character.level, "Index", new { @character.id })
+            </div>
+            <div class="col-xs-1">
+                @Html.ActionLink("Edit", "CharacterEdit", new { @character.id })
+            </div>
+            <div class="col-xs-1">
+                @Html.ActionLink("Delete", "CharacterDelete", new { @character.id })
+            </div>
+        }
     </div>
-    }
-</ul>
+</div>
