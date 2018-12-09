@@ -13,7 +13,109 @@ $(document).ready(function () {
         var spellId = $(this).find('input').val()
         $('#spell option[value="' + spellId + '"]').remove();
     });
+
+    $(".char-stat-modifier").each(function () {
+        var stat = parseInt($(this).siblings(".char-stat-number").text());
+        var modifier = "+0";
+        if (stat > 10) {
+            stat = stat - 10;
+            modifier = "+" + Math.floor(stat / 2);
+        }
+        else {
+            stat = stat - 10;
+            modifier = Math.floor(stat / 2);
+        }
+        $(this).text(modifier);
+    });
+
+    $(".char-init-number").text($(".char-stat-name:contains('DEX')").siblings(".char-stat-modifier").text());
 });
+
+
+$(function () {
+    $("#dialog-tohit").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        buttons: {
+            Yes: function () {
+                $(this).dialog("close");
+                $("#dialog-damage").dialog("open");
+            },
+            No: function () {
+                $(this).dialog("close");
+            }
+        }
+    });
+});
+
+    $(function () {
+        $("#dialog-damage").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                Thanks: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
+
+
+$(".weapon").click(function () {
+    
+    var damageInfo = "1d20";
+    var modifier = $(".char-stat-name:contains('STR')").siblings(".char-stat-modifier").text().replace("+","");
+    $("#equation-tohit").text(damageInfo + " + " + modifier + " =");
+
+    $("#roll-tohit").text(roll(damageInfo, modifier));
+
+    damageInfo = $(this).attr("damage");
+
+    $("#equation-damage").text(damageInfo + " + " + modifier + " =");
+
+    $("#roll-damage").text(roll(damageInfo, modifier));
+
+    $("#dialog-tohit").dialog("open");     
+});
+
+$(".spell").click(function () {
+
+    var damageInfo = "1d20";
+    var modifier = spellModifier();
+    $("#equation-tohit").text(damageInfo + " + " + modifier + " =");
+
+    $("#roll-tohit").text(roll(damageInfo, modifier));
+
+    damageInfo = $(this).attr("damage");
+
+    $("#equation-damage").text(damageInfo + " + " + modifier + " =");
+
+    $("#roll-damage").text(roll(damageInfo, modifier));
+
+    $("#dialog-tohit").dialog("open"); 
+
+});
+
+
+// TEST THIS
+function spellModifier() {
+    var charClass = $(".class").text();
+    if (charClass == "Bard" || charClass == "Sorcerer" || charClass == "Warlock") {
+        return $(".char-stat-name:contains('CHA')").siblings(".char-stat-modifier").text().replace("+", "");
+    }
+    else if (charClass == "Wizard") {
+        return $(".char-stat-name:contains('INT')").siblings(".char-stat-modifier").text().replace("+", "");
+    }
+    else if (charClass == "Cleric" || charClass == "Druid" || charClass == "Paladin" || charClass == "Ranger") {
+        return $(".char-stat-name:contains('WIS')").siblings(".char-stat-modifier").text().replace("+", "");
+    }
+}
 
 function addWeapon() {
     var weapon = $('#weapon').find(":selected").text();
@@ -32,17 +134,16 @@ function addSpell() {
     $('#spell option[value="' + spellId + '"]').remove();
 }
 
-function roll(damageInfo) {
-    var damageInfoArray = damageInfo.split("d");
-    var numRolls = damageInfoArray[0];
-    var numSides = damageInfoArray[1];
+function roll(rollInfo, modifier) {
+    var rollInfoArray = rollInfo.split("d");
+    var numRolls = rollInfoArray[0];
+    var numSides = rollInfoArray[1];
     var sum = 0;
     for (var i = 0; i < numRolls; i++) {
         sum += Math.floor(Math.random() * numSides) + 1;
     }
-    rollToHit = Math.floor(Math.random() * 20) + 1;
-    alert("You roll a 1d20 to hit: " + rollToHit);
-    alert("You roll " + damageInfo + ": " + sum);
+    sum = sum + parseInt(modifier);
+    return sum;
 }
 
 function removeSpell(spell) {
@@ -67,4 +168,60 @@ function removeWeapon(weapon) {
         }
     });
     $(weapon).parent().remove();
+}
+
+// adds hit points
+function addHitPoint() {
+    if ($(".char-hp-total").hasClass("red")) {
+        $(".char-hp-total").removeClass("red");
+        $(".char-hp-current").removeClass("red");
+        $(".char-hp-bonus").removeClass("red");
+    }
+    
+    var total = $(".char-hp-total").text();
+    var current = $(".char-hp-current").text();
+    var bonus = $(".char-hp-bonus").text();
+    if (total == current) { // if hp is full, give bonus hp
+        if (!$(".char-hp-bonus").hasClass("gold")) {
+            $(".char-hp-bonus").addClass("gold");
+        }
+        bonus++;
+        $(".char-hp-bonus").text(bonus);
+    }
+    else {
+        current++;
+        $(".char-hp-current").text(current);
+    }
+}
+
+// removes hit points
+function removeHitPoint() {
+    var total = parseInt($(".char-hp-total").text());
+    var current = parseInt($(".char-hp-current").text());
+    var bonus = parseInt($(".char-hp-bonus").text());
+    console.log(total + " " + current + " " + bonus);
+    if (total == current && bonus != 0) { // removes bonus hp first
+        bonus--;
+
+        if (bonus == 0) {
+            $(".char-hp-bonus").removeClass("gold");
+        }
+
+        $(".char-hp-bonus").text(bonus);
+    }
+    else if (bonus == 0 && current == 0) { // you are dead!
+        alert("You are dead!");
+        $(".char-hp-total").addClass("red");
+        $(".char-hp-current").addClass("red");
+        $(".char-hp-bonus").addClass("red");
+    }
+    else { // removes current hp if no bonus hp exists
+        current = current - 1;
+        console.log(current);
+        $(".char-hp-current").text(current);
+    }
+}
+
+function removeHitPointHelper(bonus, current, total) {
+
 }

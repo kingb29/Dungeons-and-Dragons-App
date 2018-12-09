@@ -44,6 +44,18 @@ public class CharacterViewModel
     [RegularExpression(@"^[1-9]\d*$")]
     public string cha { get; set; }
 
+    [Required]
+    [RegularExpression(@"^[1-9]\d*$")]
+    public string armor { get; set; }
+
+    [Required]
+    [RegularExpression(@"^[1-9]\d*$")]
+    public string hitpoints { get; set; }
+
+    [Required]
+    [RegularExpression(@"^[1-9]\d*$")]
+    public string speed { get; set; }
+
     public Race race { get; set; }
 
     public int racePos { get; set; }
@@ -115,6 +127,10 @@ public class CharacterViewModel
         inte = character.inte.ToString();
         cha = character.cha.ToString();
         wis = character.wis.ToString();
+
+        armor = character.armor;
+        hitpoints = character.hitpoints;
+        speed = character.speed;
 
         spells = character.spells;
         weapons = character.weapons;

@@ -130,7 +130,7 @@ namespace dungeons_and_dragons_app.Controllers
                 long charId = dbo.createCharacter(model);
                 if (charId != -1)
                 {
-                    return RedirectToAction("Index", new { id = charId });
+                    return RedirectToAction("Dashboard", "Home");
                 }
                 else
                 {
@@ -226,6 +226,14 @@ namespace dungeons_and_dragons_app.Controllers
                     return View("CharacterEdit", model);
                 }
             }
+
+        }
+
+        public ActionResult CharacterDelete(int id)
+        {
+            DataObj dbo = new DataObj(appSetting, sessionUtility);
+            dbo.deleteCharacterById(id);
+            return RedirectToAction("Dashboard", "Home");
 
         }
 

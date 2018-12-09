@@ -239,6 +239,9 @@ public class DataObj
                     temp.inte = Int32.Parse(dr["Intelligence"].ToString());
                     temp.wis = Int32.Parse(dr["Wisdom"].ToString());
                     temp.cha = Int32.Parse(dr["Charisma"].ToString());
+                    temp.armor = dr["ArmorClass"].ToString();
+                    temp.hitpoints = dr["HitPoints"].ToString();
+                    temp.speed = dr["Speed"].ToString();
                     temp.alignment.id = Int32.Parse(dr["AlignmentID"].ToString());
                     temp.alignment.name = dr["AlignmentName"].ToString();
                     temp.gender = dr["Gender"].ToString();
@@ -307,6 +310,40 @@ public class DataObj
         }
     }
 
+    public bool deleteCharacterById(int id)
+    {
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            try
+            {
+                connection.Open();
+                string query = "DELETE FROM CharacterTable WHERE CharacterId = @id";
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+
+                query = "DELETE FROM CharacterSpells WHERE CharacterId = @id";
+                command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+
+                query = "DELETE FROM CharacterWeapons WHERE CharacterId = @id";
+                command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@id", id);
+                command.ExecuteNonQuery();
+
+                connection.Close();
+
+                return true;
+            }
+            catch (MySqlException e)
+            {
+                Console.Write(e);
+                return false;
+            }
+        }
+    }
+
     public long createCharacter(CharacterViewModel model)
     {
         using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -327,7 +364,7 @@ public class DataObj
 
                 // inserting into character table
                 connection.Open();
-                string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,Gender,RaceID,ClassID,AlignmentID,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,UserID) VALUES(@name,@level,@gender,@race,@class,@alignment,@str,@dex,@con,@inte,@wis,@cha,@user)";
+                string query = "INSERT INTO CharacterTable(CharacterName,CharacterLevel,Gender,RaceID,ClassID,AlignmentID,Strength,Dexterity,Constitution,Intelligence,Wisdom,Charisma,ArmorClass,HitPoints,Speed,UserID) VALUES(@name,@level,@gender,@race,@class,@alignment,@str,@dex,@con,@inte,@wis,@cha,@armor,@hitpoints,@speed,@user)";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@name", model.name);
                 command.Parameters.AddWithValue("@gender", gender);
@@ -341,6 +378,9 @@ public class DataObj
                 command.Parameters.AddWithValue("@inte", Convert.ToInt32(model.inte));
                 command.Parameters.AddWithValue("@wis", Convert.ToInt32(model.wis));
                 command.Parameters.AddWithValue("@cha", Convert.ToInt32(model.cha));
+                command.Parameters.AddWithValue("@armor", Convert.ToInt32(model.armor));
+                command.Parameters.AddWithValue("@hitpoints", Convert.ToInt32(model.hitpoints));
+                command.Parameters.AddWithValue("@speed", Convert.ToInt32(model.speed));
                 command.Parameters.AddWithValue("@user", _sessionUtility.GetSession("UserID"));
                 command.ExecuteNonQuery();
 
@@ -349,12 +389,12 @@ public class DataObj
                 // inserting spells 
                 List<Spell> spells = model.spells;
 
-                foreach (var spell in spells)
+                for (int i = 0; i < model.spellInputs.Length; i++)
                 {
                     query = "INSERT INTO CharacterSpells(CharacterID,SpellId) VALUES(@charId,@spellId)";
                     command = new MySqlCommand(query, connection);
                     command.Parameters.AddWithValue("@charId", charId);
-                    command.Parameters.AddWithValue("@spellId", Convert.ToInt32(spell.id));
+                    command.Parameters.AddWithValue("@spellId", Convert.ToInt32(model.spellInputs[i]));
                     command.ExecuteNonQuery();
                 }
 
@@ -362,12 +402,12 @@ public class DataObj
 
                 List<Weapon> weapons = model.weapons;
 
-                foreach (var weapon in weapons)
+                for (int i = 0; i < model.weaponInputs.Length; i++)
                 {
                     query = "INSERT INTO CharacterWeapons(CharacterID,WeaponId) VALUES(@charId,@weaponId)";
                     command = new MySqlCommand(query, connection);
                     command.Parameters.AddWithValue("@charId", charId);
-                    command.Parameters.AddWithValue("@spellId", Convert.ToInt32(weapon.id));
+                    command.Parameters.AddWithValue("@weaponId", Convert.ToInt32(model.weaponInputs[i]));
                     command.ExecuteNonQuery();
                 }
 
@@ -405,7 +445,7 @@ public class DataObj
                 connection.Open();
                 string query = "UPDATE CharacterTable SET CharacterName=@name,CharacterLevel=@level,Gender=@gender,RaceID=@race," +
                     "ClassID=@class,AlignmentID=@alignment,Strength=@str,Dexterity=@dex,Constitution=@con,Intelligence=@inte," +
-                    "Wisdom=@wis,Charisma=@cha,UserID=@user WHERE CharacterID=@id";
+                    "Wisdom=@wis,Charisma=@cha,ArmorClass=@armor,HitPoints=@hitpoints,Speed=@speed,UserID=@user WHERE CharacterID=@id";
                 MySqlCommand command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@id", model.id);
                 command.Parameters.AddWithValue("@name", model.name);
@@ -420,6 +460,9 @@ public class DataObj
                 command.Parameters.AddWithValue("@inte", Convert.ToInt32(model.inte));
                 command.Parameters.AddWithValue("@wis", Convert.ToInt32(model.wis));
                 command.Parameters.AddWithValue("@cha", Convert.ToInt32(model.cha));
+                command.Parameters.AddWithValue("@armor", Convert.ToInt32(model.armor));
+                command.Parameters.AddWithValue("@hitpoints", Convert.ToInt32(model.hitpoints));
+                command.Parameters.AddWithValue("@speed", Convert.ToInt32(model.speed));
                 command.Parameters.AddWithValue("@user", _sessionUtility.GetSession("UserID"));
                 command.ExecuteNonQuery();
 
@@ -431,34 +474,41 @@ public class DataObj
                 command.ExecuteNonQuery();
 
                 // inserting spells 
-
-                for (int i = 0; i < model.spellInputs.Length; i++)
+                if (model.spellInputs != null)
                 {
-                    query = "INSERT INTO CharacterSpells(CharacterID,SpellId) VALUES(@charId,@spellId)";
-                    command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@charId", model.id);
-                    command.Parameters.AddWithValue("@spellId", Convert.ToInt32(model.spellInputs[i]));
-                    command.ExecuteNonQuery();
+                    for (int i = 0; i < model.spellInputs.Length; i++)
+                    {
+                        query = "INSERT INTO CharacterSpells(CharacterID,SpellId) VALUES(@charId,@spellId)";
+                        command = new MySqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@charId", model.id);
+                        command.Parameters.AddWithValue("@spellId", Convert.ToInt32(model.spellInputs[i]));
+                        command.ExecuteNonQuery();
+                    }
                 }
-
-                // dropping old weapons
 
                 query = "DELETE FROM CharacterWeapons WHERE CharacterID = @charId";
                 command = new MySqlCommand(query, connection);
                 command.Parameters.AddWithValue("@charId", model.id);
                 command.ExecuteNonQuery();
 
-                // inserting weapons
+                // dropping old weapons
 
-                List<Weapon> weapons = model.weapons;
-
-                for (int i = 0; i < model.weaponInputs.Length; i++)
+                if (model.weaponInputs != null)
                 {
-                    query = "INSERT INTO CharacterWeapons(CharacterID,WeaponId) VALUES(@charId,@weaponId)";
-                    command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@charId", model.id);
-                    command.Parameters.AddWithValue("@weaponId", Convert.ToInt32(model.weaponInputs[i]));
-                    command.ExecuteNonQuery();
+                    
+
+                    // inserting weapons
+
+                    List<Weapon> weapons = model.weapons;
+
+                    for (int i = 0; i < model.weaponInputs.Length; i++)
+                    {
+                        query = "INSERT INTO CharacterWeapons(CharacterID,WeaponId) VALUES(@charId,@weaponId)";
+                        command = new MySqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@charId", model.id);
+                        command.Parameters.AddWithValue("@weaponId", Convert.ToInt32(model.weaponInputs[i]));
+                        command.ExecuteNonQuery();
+                    }
                 }
 
                 connection.Close();

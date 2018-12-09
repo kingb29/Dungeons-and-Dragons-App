@@ -1,23 +1,24 @@
 ﻿
 @{
-    ViewData["Title"] = "Dashboard";
+	ViewData["Title"] = "Dashboard";
 }
 @model List<Character>;
-<h1>Dashboard</h1>
+<h1>Characters</h1>
 <div class="container">
-    <div class="row">
-        @foreach (var character in Model)
-        {
-            <div class="col-xs-8">
-                @Html.ActionLink(@character.name + "-" + @character.race.name + " " + @character.charClass.name + " " +
-               @character.level, "Index", new { @character.id })
-            </div>
-            <div class="col-xs-1">
-                @Html.ActionLink("Edit", "CharacterEdit", new { @character.id })
-            </div>
-            <div class="col-xs-1">
-                @Html.ActionLink("Delete", "CharacterDelete", new { @character.id })
-            </div>
-        }
-    </div>
+	<div class="row">
+		@foreach (var character in Model)
+		{
+			<a href="@Url.Action("Index", "Home", new { @character.id })">
+				<div class="col-xs-8 character character-listing">
+					@character.name - @character.race.name @character.charClass.name @character.level
+				</div>
+			</a>
+				<a href="@Url.Action("CharacterEdit", "Home", new { @character.id })">
+					<div class="col-xs-2 character edit"><span class="glyphicon glyphicon-edit"></span>Edit</div>
+				</a>
+				<a href="@Url.Action("CharacterDelete", "Home", new { @character.id })" onclick = "return confirm('Are you sure you want to delete @character.name?')">
+					<div class="col-xs-2 character delete"><span class="glyphicon glyphicon-remove"></span>Delete</div>
+				</a>
+				}
+		</div>
 </div>
