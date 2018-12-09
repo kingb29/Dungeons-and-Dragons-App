@@ -24,6 +24,9 @@ $(document).ready(function () {
         else {
             stat = stat - 10;
             modifier = Math.floor(stat / 2);
+            if (modifier == 0) {
+                modifier = "+0";
+            }
         }
         $(this).text(modifier);
     });
@@ -70,8 +73,14 @@ $(function () {
 $(".weapon").click(function () {
     
     var damageInfo = "1d20";
-    var modifier = $(".char-stat-name:contains('STR')").siblings(".char-stat-modifier").text().replace("+","");
-    $("#equation-tohit").text(damageInfo + " + " + modifier + " =");
+    var modifier = $(".char-stat-name:contains('STR')").siblings(".char-stat-modifier").text().replace("+", "");
+    if (modifier >= 0) {
+        $("#equation-tohit").text(damageInfo + " + " + modifier + " =");
+    }
+    else {
+
+        $("#equation-tohit").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+    }
 
     $("#roll-tohit").text(roll(damageInfo, modifier));
 
@@ -88,13 +97,26 @@ $(".spell").click(function () {
 
     var damageInfo = "1d20";
     var modifier = spellModifier();
-    $("#equation-tohit").text(damageInfo + " + " + modifier + " =");
+
+    if (modifier >= 0) {
+        $("#equation-tohit").text(damageInfo + " + " + modifier + " =");
+    }
+    else {
+
+        $("#equation-tohit").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+    }
 
     $("#roll-tohit").text(roll(damageInfo, modifier));
 
     damageInfo = $(this).attr("damage");
 
-    $("#equation-damage").text(damageInfo + " + " + modifier + " =");
+    if (modifier >= 0) {
+        $("#equation-damage").text(damageInfo + " + " + modifier + " =");
+    }
+    else {
+
+        $("#equation-damage").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+    }
 
     $("#roll-damage").text(roll(damageInfo, modifier));
 
