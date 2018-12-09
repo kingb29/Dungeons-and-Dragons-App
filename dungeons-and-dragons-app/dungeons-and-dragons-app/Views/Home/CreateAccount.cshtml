@@ -10,33 +10,38 @@
 </head>
 <body>
 
-    @ViewBag.error
+    
     @using (Html.BeginForm("Register", "Account", FormMethod.Post))
-    {
-    <table border="0" cellpadding="5" cellspacing="5">
-        <h3>Create an Account</h3>
-        <tr>
-            <td>Email:</td>
-            <td>@Html.TextBox("email")</td>
-        </tr>
-        <tr>
-            <td>Username:</td>
-            <td>@Html.TextBox("username")</td>
-        </tr>
+    {<img src="~/images/dnd3.png" />
+     <table id="registerTable">
+         <h3>Create an Account now to begin making Characters!</h3>
 
-        <tr>
-            <td>Password:</td>
-            <td>@Html.Password("password")</td>
-        </tr>
+         @ViewBag.error
+         <tr>
+             <td>Email:</td>
+             <td>@Html.TextBox("email")</td>
+         </tr>
+         <tr>
+             <td>Username:</td>
+             <td>@Html.TextBox("username")</td>
+         </tr>
 
-        <tr>
-            <td></td>
-            <td><input type="submit" value="Create Account"></td>
-        </tr>
-    </table>
+         <tr>
+             <td>Password:</td>
+             <td>@Html.Password("password")</td>
+         </tr>
+         <tr>
+             <td></td>
+             <td><input type="submit" value="Create Account"></td>
+         </tr>
+     </table>
 
-
-
+      <h3>To protect your information better please follow the guidelines below:</h3>
+      <ul>
+          <li>Usernames/Passwords must be 9 characters or longer</li>
+          <li>Passwords must include at least 1 number</li>
+          <li>Emails must end with an address (ex. gmail.com)</li>
+      </ul>
 
 
 

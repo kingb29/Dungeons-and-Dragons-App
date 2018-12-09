@@ -2,8 +2,19 @@
     text-align:center;
 }
 
-table {
+#registerTable {
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+}
+
+ul {
+    text-align: center;
+    list-style-position: inside;
+}
+
+td {
+    padding-bottom: 1em;
 }
