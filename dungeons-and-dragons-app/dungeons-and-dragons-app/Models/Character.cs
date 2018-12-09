@@ -12,6 +12,9 @@ public class Character
     public int wis { get; set; }
     public int cha { get; set; }
     public Race race { get; set; }
+    public string armor { get; set; }
+    public string speed { get; set; }
+    public string hitpoints { get; set; }
     public string gender { get; set; }
     public int level { get; set; }
     public CharacterClass charClass { get; set; }
@@ -23,7 +26,6 @@ public class Character
 	{
         name = "";
         id = 0;
-        //charAttributes = new CharacterAttribute[0];
         gender = "";
         alignment = new Alignment();
         race = new Race();
@@ -32,13 +34,15 @@ public class Character
         spells = new List<Spell>();
 	}
     public Character(string nameIn, string genderIn, CharacterAttribute[] charAttributesIn,
-                      List<Weapon> weaponsIn, List<Spell> spellsIn)
+                      List<Weapon> weaponsIn, List<Spell> spellsIn, string armorIn, string speedIn, string hitpointsIn)
     {
         this.name = nameIn;
-        //this.charAttributes = charAttributesIn;
         this.weapons = weaponsIn;
         this.spells = spellsIn;
         this.gender = genderIn;
+        this.hitpoints = hitpointsIn;
+        this.speed = speedIn;
+        this.armor = armorIn;
     }
 
     public Character(int id, AppSetting appSetting)
@@ -56,6 +60,9 @@ public class Character
         this.race = temp.race;
         this.gender = temp.gender;
         this.level = temp.level;
+        this.armor = temp.armor;
+        this.speed = temp.speed;
+        this.hitpoints = temp.hitpoints;
         this.charClass = temp.charClass;
         this.alignment = temp.alignment;
         this.spells = temp.spells;
@@ -68,18 +75,5 @@ public class Character
             this.gender = "Male";
         else
             this.gender = "Female";
-    }
-
-    public CharacterAttribute[] addCharAttribute(CharacterAttribute[] currAttributes)
-    {
-        return null;
-    }
-    public Weapon[] addWeapon(Weapon[] currWeapons)
-    {
-        return null;
-    }
-    public Spell[] addSpell(Spell[] currSpells)
-    {
-        return null;
     }
 }

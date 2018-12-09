@@ -61,16 +61,25 @@
             <br>
         </div>
         <div class="col-xs-12 col-lg-3">
+            <label for="speed" class="strong">Speed:</label><br>
+            @Html.TextBoxFor(m => m.speed, new { @class = "form-control" })
+            <br>
+            <label for="armor" class="strong">Armor Class:</label><br>
+            @Html.TextBoxFor(m => m.armor, new { @class = "form-control" })
+            <br>
+            <label for="hitpoints" class="strong">Total hit points:</label><br>
+            @Html.TextBoxFor(m => m.hitpoints, new { @class = "form-control" })
+            <br>
             <div>
                 <label class="strong">Weapons:</label><br>
                 <div id="weapon-list">
-                    @foreach(var weapon in Model.weapons)
+                    @foreach (var weapon in Model.weapons)
                     {
-                    <div class='weapon-list-item'>
-                        <label class='spell'>@weapon.name</label>
-                        <input type='text' class='hidden' name='weaponInputs' value="@weapon.id">
-                        <span onclick='removeWeapon(this)' class='glyphicon glyphicon-remove weapon-remove'></span> <br>
-                    </div>
+                        <div class='weapon-list-item'>
+                            <label class='spell'>@weapon.name</label>
+                            <input type='text' class='hidden' name='weaponInputs' value="@weapon.id">
+                            <span onclick='removeWeapon(this)' class='glyphicon glyphicon-remove weapon-remove'></span> <br>
+                        </div>
                     }
                 </div>
                 @Html.DropDownListFor(m => m.weapon, Model.weaponList, new { @class = "form-control" })
@@ -81,13 +90,13 @@
             <div>
                 <label class="strong">Spells:</label><br>
                 <div id="spell-list">
-                    @foreach(var spell in Model.spells)
+                    @foreach (var spell in Model.spells)
                     {
-                    <div class='spell-list-item'>
-                        <label class='spell'>@spell.name</label>
-                        <input type='text' class='hidden' name='spellInputs' value="@spell.id">
-                        <span onclick='removeSpell(this)' class='glyphicon glyphicon-remove spell-remove'></span> <br>
-                    </div>
+                        <div class='spell-list-item'>
+                            <label class='spell'>@spell.name</label>
+                            <input type='text' class='hidden' name='spellInputs' value="@spell.id">
+                            <span onclick='removeSpell(this)' class='glyphicon glyphicon-remove spell-remove'></span> <br>
+                        </div>
                     }
 
                 </div>

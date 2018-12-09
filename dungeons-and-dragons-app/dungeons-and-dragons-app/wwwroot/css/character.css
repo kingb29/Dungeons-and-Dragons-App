@@ -130,13 +130,42 @@
 /* ---- OTHER ---- */
 .char-div-title {
     font-family: 'Acme', sans-serif;
+    display: inline;
     text-align: left;
-    margin-top: 5px;
+    margin-bottom: 10px;
     color: #000;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
 
-.char-div-title h3 {
-    margin-top: 5px;
+.char-div-title h3, .plus, .minus {
+    display:inline;
+}
+
+.plus, .minus {
+    font-size: 30px;
+    margin-left: 20px;
+}
+
+.plus {
+    color: green;
+}
+
+.minus {
+    color: red;
+}
+
+.red {
+    color: red;
+}
+
+.gold {
+    color: gold;
 }
 
 .char-div-title-left {
@@ -169,4 +198,8 @@
 .char-div-text span:hover {
     color:blue;
     cursor: default;
+}
+
+#dialog-tohit, #dialog-damage {
+    text-align: center;
 }

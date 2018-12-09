@@ -8,12 +8,13 @@
 }
 
 @model Character;
+
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
                 <div class="char-div-title char-div-title-left">
                     <h1>@Html.DisplayFor(m => m.name)</h1>
-                    <h3>@Html.DisplayFor(m => m.race.name) @Html.DisplayFor(m => m.charClass.name) @Html.DisplayFor(m => m.level)</h3>
+                    <h3>@Html.DisplayFor(m => m.gender) @Html.DisplayFor(m => m.race.name) <span class="class">@Html.DisplayFor(m => m.charClass.name)</span> @Html.DisplayFor(m => m.level)</h3>
                 </div>
                 <div class="char-div-title char-div-title-right">
                     <h3>@Html.DisplayFor(m => m.alignment.name)</h3>
@@ -22,106 +23,124 @@
         </div>
         <div class="row">
             <div class="col-lg-2 col-xs-4 char-stat-div">
-                <img src="~/images/stat-proficient.png" />
+                <img src="~/images/stat.png" />
                 <h4 class="char-stat-name">STR</h4>
                 <h3 class="char-stat-number">@Html.DisplayFor(m => m.str)</h3>
-                <h5 class="char-stat-modifier">+3</h5>
+                <h5 class="char-stat-modifier"></h5>
             </div>
             <div class="col-lg-2 col-xs-4 char-stat-div">
                 <img src="~/images/stat.png" />
                 <h4 class="char-stat-name">DEX</h4>
                 <h3 class="char-stat-number">@Html.DisplayFor(m => m.dex)</h3>
-                <h5 class="char-stat-modifier">+3</h5>
+                <h5 class="char-stat-modifier"></h5>
             </div>
             <div class="col-lg-2 col-xs-4 char-stat-div">
                 <img src="~/images/stat.png" />
                 <h4 class="char-stat-name">CON</h4>
                 <h3 class="char-stat-number">@Html.DisplayFor(m => m.con)</h3>
-                <h5 class="char-stat-modifier">+3</h5>
+                <h5 class="char-stat-modifier"></h5>
             </div>
             <div class="col-lg-2 col-xs-4 char-stat-div">
                 <img src="~/images/stat.png" />
                 <h4 class="char-stat-name">INT</h4>
                 <h3 class="char-stat-number">@Html.DisplayFor(m => m.inte)</h3>
-                <h5 class="char-stat-modifier">+3</h5>
+                <h5 class="char-stat-modifier"></h5>
             </div>
             <div class="col-lg-2 col-xs-4 char-stat-div">
                 <img src="~/images/stat.png" />
                 <h4 class="char-stat-name">WIS</h4>
                 <h3 class="char-stat-number">@Html.DisplayFor(m => m.wis)</h3>
-                <h5 class="char-stat-modifier">+3</h5>
+                <h5 class="char-stat-modifier"></h5>
             </div>
             <div class="col-lg-2 col-xs-4 char-stat-div">
                 <img src="~/images/stat.png" />
                 <h4 class="char-stat-name">CHA</h4>
                 <h3 class="char-stat-number">@Html.DisplayFor(m => m.cha)</h3>
-                <h5 class="char-stat-modifier">+3</h5>
+                <h5 class="char-stat-modifier"></h5>
             </div>
         </div>
         <div class="row">
             <div class="col-xs-12">
-                <h3 class="char-div-title">Hit Points&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"><span class="glyphicon glyphicon-minus"></h3>
+                <h3 class="char-div-title">Hit Points</h3><div class="plus"><span class="glyphicon glyphicon-plus" onclick="addHitPoint()"></div><div class="minus"><span class="glyphicon glyphicon-minus" onclick="removeHitPoint()"></div>
             </div>
             <div class="col-lg-6 col-xs-12 char-hp-div">
                 <div class="char-hp-border">
                     <div class="char-hp-section">
                         <h4 class="char-hp-name">BONUS</h4>
-                        <h3 class="char-hp-number">+0</h3>
+                        <h3 class="char-hp-number char-hp-bonus">0</h3>
                     </div>
                     <div class="char-hp-section">
                         <h4 class="char-hp-name">CURRENT</h4>
-                        <h3 class="char-hp-number">60</h3>
+                        <h3 class="char-hp-number char-hp-current">@Html.DisplayFor(m => m.hitpoints)</h3>
                     </div>
                     <div class="char-hp-section">
                         <h4 class="char-hp-name">TOTAL</h4>
-                        <h3 class="char-hp-number">83</h3>
+                        <h3 class="char-hp-number char-hp-total">@Html.DisplayFor(m => m.hitpoints)</h3>
                     </div>
                 </div>
             </div>
             <div class="col-lg-2 col-xs-4 char-armor-div">
                 <img src="~/images/shield.png" />
                 <h4 class="char-armor-name">ARMOR</h4>
-                <h3 class="char-armor-number">16</h3>
+                <h3 class="char-armor-number">@Html.DisplayFor(m => m.armor)</h3>
             </div>
             <div class="col-lg-2 col-xs-4 char-init-div">
                 <div class="char-init-border">
                     <h4 class="char-init-name">INITIATIVE</h4>
-                    <h3 class="char-init-number">+2</h3>
+                    <h3 class="char-init-number"></h3>
                 </div>
             </div>
             <div class="col-lg-2 col-xs-4 char-speed-div">
                 <div class="char-speed-border">
-                    <h4 class="char-init-name">SPEED</h4>
-                    <h3 class="char-init-number">30ft</h3>
+                    <h4 class="char-speed-name">SPEED</h4>
+                    <h3 class="char-speed-number">@Html.DisplayFor(m => m.speed) ft</h3>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h3 class="char-div-title">Spells</h3>
-            </div>
-            <div class="col-xs-12">
-                <div class="char-div">
-                    <div class="char-div-text">
-                        @foreach(var spell in Model.spells) {
-                        <span onclick="roll('@spell.damage')">@spell.name</span><br />
-                        }
+        @if (Model.spells.Count > 0)
+        {
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3 class="char-div-title">Spells</h3>
+                </div>
+                <div class="col-xs-12">
+                    <div class="char-div">
+                        <div class="char-div-text">
+                            @foreach (var spell in Model.spells)
+                            {
+                                <span damage="@spell.damage" class="spell">@spell.name</span><br />
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <h3 class="char-div-title">Weapons</h3>
-            </div>
-            <div class="col-xs-12">
-                <div class="char-div">
-                    <div class="char-div-text">
-                        @foreach (var weapon in Model.weapons)
-                        {
-                            <span onclick="roll('@weapon.damage')">@weapon.name</span><br />
-                        }
+        }
+        @if (Model.weapons.Count > 0)
+        {
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3 class="char-div-title">Weapons</h3>
+                </div>
+                <div class="col-xs-12">
+                    <div class="char-div">
+                        <div class="char-div-text">
+                            @foreach (var weapon in Model.weapons)
+                            {
+                                <span class="weapon" damage="@weapon.damage">@weapon.name</span><br />
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
+        }
+
+            <div id="dialog-tohit" title="You roll to hit!">
+                <p id="equation-tohit"></p>
+                <h2 id="roll-tohit"></h2>
+                <p>Tell the DM what you rolled.</p>
+                <p>Did you hit the monster?</p>
+            </div>
+        <div id="dialog-damage" title="You smite the foul creature!">
+            <p>Damage Roll: <span id="equation-damage"></span></p>
+            <h2 id="roll-damage"></h2>
         </div>
