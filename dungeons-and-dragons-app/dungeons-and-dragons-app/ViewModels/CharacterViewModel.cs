@@ -12,6 +12,7 @@ public class CharacterViewModel
     [StringLength(60, MinimumLength = 3)]
     public string name { get; set; }
 
+    [Required]
     public string gender { get; set; }
 
     [Required]
