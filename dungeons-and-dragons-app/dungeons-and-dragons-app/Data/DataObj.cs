@@ -25,13 +25,12 @@ public class DataObj
 
     // Gets list of characters' name/level/class/race to display on dashboard
 
-    public List<Character> getCharactersFromUserId()
+    public List<Character> getCharactersFromUserId(int userId)
     {
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
             try
             {
-                string userId = _sessionUtility.GetSession("UserID");
                 List<Character> characters = new List<Character>();
                 connection.Open();
                 string query = "SELECT `CharacterID`, `CharacterName`,`CharacterLevel`, Class.`ClassID`, `ClassName`, Race.`RaceID`, `RaceName` FROM `CharacterTable` " +
@@ -344,7 +343,7 @@ public class DataObj
         }
     }
 
-    public long createCharacter(CharacterViewModel model)
+    public long createCharacter(CharacterViewModel model, int userId)
     {
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
@@ -381,7 +380,7 @@ public class DataObj
                 command.Parameters.AddWithValue("@armor", Convert.ToInt32(model.armor));
                 command.Parameters.AddWithValue("@hitpoints", Convert.ToInt32(model.hitpoints));
                 command.Parameters.AddWithValue("@speed", Convert.ToInt32(model.speed));
-                command.Parameters.AddWithValue("@user", _sessionUtility.GetSession("UserID"));
+                command.Parameters.AddWithValue("@user", userId);
                 command.ExecuteNonQuery();
 
                 long charId = command.LastInsertedId;
@@ -423,7 +422,7 @@ public class DataObj
     }
 }
 
-    public int editCharacter(CharacterViewModel model)
+    public int editCharacter(CharacterViewModel model, int userId)
     {
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
@@ -463,7 +462,7 @@ public class DataObj
                 command.Parameters.AddWithValue("@armor", Convert.ToInt32(model.armor));
                 command.Parameters.AddWithValue("@hitpoints", Convert.ToInt32(model.hitpoints));
                 command.Parameters.AddWithValue("@speed", Convert.ToInt32(model.speed));
-                command.Parameters.AddWithValue("@user", _sessionUtility.GetSession("UserID"));
+                command.Parameters.AddWithValue("@user", userId);
                 command.ExecuteNonQuery();
 
                 // dropping old spells
