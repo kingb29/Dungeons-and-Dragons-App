@@ -67,19 +67,43 @@ $(function () {
                 }
             }
         });
+});
+
+$(function () {
+    $("#dialog-initiative").dialog({
+        autoOpen: false,
+        resizable: false,
+        height: "auto",
+        width: 400,
+        modal: true,
+        buttons: {
+            Thanks: function () {
+                $(this).dialog("close");
+            }
+        }
     });
+});
 
 
 $(".weapon").click(function () {
     
     var damageInfo = "1d20";
-    var modifier = $(".char-stat-name:contains('STR')").siblings(".char-stat-modifier").text().replace("+", "");
+    if ($(".char-stat-name:contains('STR')").siblings(".char-stat-modifier").text().includes("+")) {
+        var modifier = $(".char-stat-name:contains('STR')").siblings(".char-stat-modifier").text().replace("+", "");
+    }
+    else {
+        var modifier = $(".char-stat-name:contains('STR')").siblings(".char-stat-modifier").text();
+    }
     if (modifier >= 0) {
         $("#equation-tohit").text(damageInfo + " + " + modifier + " =");
     }
     else {
-
-        $("#equation-tohit").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+        if (modifier.includes("-")) {
+            $("#equation-tohit").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+        }
+        else {
+            $("#equation-tohit").text(damageInfo + " - " + modifier + " =")
+        }
     }
 
     $("#roll-tohit").text(roll(damageInfo, modifier));
@@ -102,8 +126,12 @@ $(".spell").click(function () {
         $("#equation-tohit").text(damageInfo + " + " + modifier + " =");
     }
     else {
-
-        $("#equation-tohit").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+        if (modifier.includes("-")) {
+            $("#equation-tohit").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+        }
+        else {
+            $("#equation-tohit").text(damageInfo + " - " + modifier + " =")
+        }
     }
 
     $("#roll-tohit").text(roll(damageInfo, modifier));
@@ -114,8 +142,12 @@ $(".spell").click(function () {
         $("#equation-damage").text(damageInfo + " + " + modifier + " =");
     }
     else {
-
-        $("#equation-damage").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+        if (modifier.includes("-")) {
+            $("#equation-damage").text(damageInfo + " - " + modifier.replace("-", "") + " =");
+        }
+        else {
+            $("#equation-damage").text(damageInfo + " - " + modifier + " =")
+        }
     }
 
     $("#roll-damage").text(roll(damageInfo, modifier));
@@ -129,13 +161,31 @@ $(".spell").click(function () {
 function spellModifier() {
     var charClass = $(".class").text();
     if (charClass == "Bard" || charClass == "Sorcerer" || charClass == "Warlock") {
-        return $(".char-stat-name:contains('CHA')").siblings(".char-stat-modifier").text().replace("+", "");
+        if ($(".char-stat-name:contains('CHA')").siblings(".char-stat-modifier").text().includes("+")) {
+            return $(".char-stat-name:contains('CHA')").siblings(".char-stat-modifier").text().replace("+", "");
+        }
+        else {
+            return $(".char-stat-name:contains('CHA')").siblings(".char-stat-modifier").text();
+        }
     }
     else if (charClass == "Wizard") {
-        return $(".char-stat-name:contains('INT')").siblings(".char-stat-modifier").text().replace("+", "");
+        if ($(".char-stat-name:contains('INT')").siblings(".char-stat-modifier").text().includes("+")) {
+            return $(".char-stat-name:contains('INT')").siblings(".char-stat-modifier").text().replace("+", "");
+        }
+        else {
+            return $(".char-stat-name:contains('INT')").siblings(".char-stat-modifier").text();
+        }
     }
     else if (charClass == "Cleric" || charClass == "Druid" || charClass == "Paladin" || charClass == "Ranger") {
-        return $(".char-stat-name:contains('WIS')").siblings(".char-stat-modifier").text().replace("+", "");
+        if ($(".char-stat-name:contains('WIS')").siblings(".char-stat-modifier").text().includes("+")) {
+            return $(".char-stat-name:contains('WIS')").siblings(".char-stat-modifier").text().replace("+", "");
+        }
+        else {
+            return $(".char-stat-name:contains('WIS')").siblings(".char-stat-modifier").text();
+        }
+    }
+    else {
+        return 0;
     }
 }
 
@@ -165,6 +215,10 @@ function roll(rollInfo, modifier) {
         sum += Math.floor(Math.random() * numSides) + 1;
     }
     sum = sum + parseInt(modifier);
+
+    if (sum < 1) {
+        sum = 1;
+    }
     return sum;
 }
 
@@ -244,6 +298,16 @@ function removeHitPoint() {
     }
 }
 
-function removeHitPointHelper(bonus, current, total) {
+$(".char-init-number").click(function () {
+    var damageInfo = "1d20";
+    if ($(".char-stat-name:contains('DEX')").siblings(".char-stat-modifier").text().includes("+")) {
+        var modifier = $(".char-stat-name:contains('DEX')").siblings(".char-stat-modifier").text().replace("+", "");
+    }
+    else {
+        var modifier = $(".char-stat-name:contains('DEX')").siblings(".char-stat-modifier").text();
+    }
 
-}
+    $("#roll-initiative").text(roll(damageInfo, modifier));
+
+    $("#dialog-initiative").dialog("open");
+});

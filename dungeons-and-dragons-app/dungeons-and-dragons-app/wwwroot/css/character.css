@@ -200,6 +200,11 @@
     cursor: default;
 }
 
-#dialog-tohit, #dialog-damage {
+.char-init-number:hover {
+        color: blue;
+        cursor: default;
+    }
+
+#dialog-tohit, #dialog-damage, #dialog-initiative {
     text-align: center;
 }

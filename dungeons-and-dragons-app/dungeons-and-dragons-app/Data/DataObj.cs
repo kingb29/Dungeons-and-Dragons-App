@@ -62,6 +62,58 @@ public class DataObj
         }
     }
 
+    public string getUserEmail(int userId)
+    {
+        string email = "";
+
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            try
+            {
+                connection.Open();
+                string query = "SELECT Email FROM User WHERE UserID = @id";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.Add(new MySqlParameter("@id", userId));
+                MySqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    email = dr["Email"].ToString();
+                }
+                connection.Close();
+                return email;
+            }
+            catch (MySqlException e)
+            {
+                Console.Write(e);
+                return email;
+            }
+        }
+    }
+
+    public string updateUserEmail(int userId, string email)
+    {
+
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            try
+            {
+                connection.Open();
+                string query = "UPDATE User SET Email=@email WHERE UserID = @id";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.Add(new MySqlParameter("@email", email));
+                cmd.Parameters.Add(new MySqlParameter("@id", userId));
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return email;
+            }
+            catch (MySqlException e)
+            {
+                Console.Write(e);
+                return email;
+            }
+        }
+    }
+
     public List<Race> getAllRaces()
     {
         List<Race> races = new List<Race>();
@@ -385,33 +437,42 @@ public class DataObj
 
                 long charId = command.LastInsertedId;
 
-                // inserting spells 
-                List<Spell> spells = model.spells;
-
-                for (int i = 0; i < model.spellInputs.Length; i++)
+                if (model.spellInputs != null)
                 {
-                    query = "INSERT INTO CharacterSpells(CharacterID,SpellId) VALUES(@charId,@spellId)";
-                    command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@charId", charId);
-                    command.Parameters.AddWithValue("@spellId", Convert.ToInt32(model.spellInputs[i]));
-                    command.ExecuteNonQuery();
+                    // inserting spells 
+                    List<Spell> spells = model.spells;
+
+                    for (int i = 0; i < model.spellInputs.Length; i++)
+                    {
+                        query = "INSERT INTO CharacterSpells(CharacterID,SpellId) VALUES(@charId,@spellId)";
+                        command = new MySqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@charId", charId);
+                        command.Parameters.AddWithValue("@spellId", Convert.ToInt32(model.spellInputs[i]));
+                        command.ExecuteNonQuery();
+                    }
                 }
 
-                // inserting weapons
 
-                List<Weapon> weapons = model.weapons;
-
-                for (int i = 0; i < model.weaponInputs.Length; i++)
+                if (model.weaponInputs != null)
                 {
-                    query = "INSERT INTO CharacterWeapons(CharacterID,WeaponId) VALUES(@charId,@weaponId)";
-                    command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@charId", charId);
-                    command.Parameters.AddWithValue("@weaponId", Convert.ToInt32(model.weaponInputs[i]));
-                    command.ExecuteNonQuery();
+
+                        // inserting weapons
+
+                        List<Weapon> weapons = model.weapons;
+
+                    for (int i = 0; i < model.weaponInputs.Length; i++)
+                    {
+                        query = "INSERT INTO CharacterWeapons(CharacterID,WeaponId) VALUES(@charId,@weaponId)";
+                        command = new MySqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@charId", charId);
+                        command.Parameters.AddWithValue("@weaponId", Convert.ToInt32(model.weaponInputs[i]));
+                        command.ExecuteNonQuery();
+                    }
                 }
 
                 connection.Close();
                 return charId;
+                
                 
             }
             catch (MySqlException e)
