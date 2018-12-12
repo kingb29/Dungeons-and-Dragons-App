@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using dungeons_and_dragons_app.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.RegularExpressions;
 
 namespace dungeons_and_dragons_app.Controllers
 {
@@ -60,11 +61,15 @@ namespace dungeons_and_dragons_app.Controllers
             }
         }
 
-        public IActionResult About()
+        public IActionResult Account()
         {
             ViewData["Message"] = "Your application description page.";
 
-            return View();
+            DataObj dataObj = new DataObj(appSetting);
+            int userId = Int32.Parse(HttpContext.Session.GetString("UserID")); 
+            string email = dataObj.getUserEmail(userId);
+
+            return View("Account", email);
         }
 
         public IActionResult CharacterCreation()
@@ -231,6 +236,26 @@ namespace dungeons_and_dragons_app.Controllers
                 }
             }
 
+        }
+
+        [HttpPost]
+        public ActionResult Account(string email)
+        {
+            Regex rx = new Regex(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+            if (rx.IsMatch(email))
+            {
+                DataObj dataObj = new DataObj(appSetting);
+                int userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+                dataObj.updateUserEmail(userId, email);
+                email = dataObj.getUserEmail(userId);
+                ViewData["Success"] = "Email updated successfully.";
+                return View("Account", email);
+            }
+            else
+            {
+                ViewData["Error"] = "You did not enter a valid email address.";
+            }
+            return View("Account", email);
         }
 
         public ActionResult CharacterDelete(int id)
