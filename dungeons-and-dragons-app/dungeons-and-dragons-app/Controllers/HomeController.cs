@@ -16,14 +16,16 @@ namespace dungeons_and_dragons_app.Controllers
     {
         private readonly string connectionString;
         private readonly AppSetting appSetting;
-        private readonly SessionUtility sessionUtility;
 
-        public HomeController(AppSetting appSetting, SessionUtility sessionUtility)
+        public HomeController(AppSetting appSetting)
         {
             connectionString = appSetting.ConnectionString;
             this.appSetting = appSetting;
-            this.sessionUtility = sessionUtility;
+        }
 
+        public AppSetting getAppSetting()
+        {
+            return appSetting;
         }
 
         public IActionResult Dashboard()
@@ -34,8 +36,9 @@ namespace dungeons_and_dragons_app.Controllers
             }
             else
             {
-                DataObj dbo = new DataObj(appSetting, sessionUtility);
-                List<Character> characters = dbo.getCharactersFromUserId();
+                DataObj dbo = new DataObj(appSetting);
+                int userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+                List<Character> characters = dbo.getCharactersFromUserId(userId);
                 if (characters.Count == 0)
                 {
                     return RedirectToAction("CharacterCreation", "Home");
@@ -99,7 +102,7 @@ namespace dungeons_and_dragons_app.Controllers
         {
             if (!ModelState.IsValid)
             {
-                DataObj dbo = new DataObj(appSetting, sessionUtility);
+                DataObj dbo = new DataObj(appSetting);
 
                 // RACE LIST
                 IEnumerable<SelectListItem> raceList = new SelectList(dbo.getAllRaces(), "id", "name");
@@ -116,18 +119,19 @@ namespace dungeons_and_dragons_app.Controllers
                 // SPELL LIST
                 IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
 
-                ViewData["race"] = raceList;
-                ViewData["charClass"] = classList;
-                ViewData["alignment"] = alignmentList;
-                ViewData["weapon"] = weaponList;
-                ViewData["spell"] = spellList;
+                model.raceList = raceList;
+                model.classList = classList;
+                model.alignmentList = alignmentList;
+                model.weaponList = weaponList;
+                model.spellList = spellList;
 
                 return View("CharacterCreation", model);
             }
             else
             {
-                DataObj dbo = new DataObj(appSetting, sessionUtility);
-                long charId = dbo.createCharacter(model);
+                DataObj dbo = new DataObj(appSetting);
+                int userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+                long charId = dbo.createCharacter(model, userId);
                 if (charId != -1)
                 {
                     return RedirectToAction("Dashboard", "Home");
@@ -149,11 +153,11 @@ namespace dungeons_and_dragons_app.Controllers
                     // SPELL LIST
                     IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
 
-                    ViewData["race"] = raceList;
-                    ViewData["charClass"] = classList;
-                    ViewData["alignment"] = alignmentList;
-                    ViewData["weapon"] = weaponList;
-                    ViewData["spell"] = spellList;
+                    model.raceList = raceList;
+                    model.classList = classList;
+                    model.alignmentList = alignmentList;
+                    model.weaponList = weaponList;
+                    model.spellList = spellList;
 
                     return View("CharacterCreation", model);
                 }
@@ -166,7 +170,7 @@ namespace dungeons_and_dragons_app.Controllers
         {
             if (!ModelState.IsValid)
             {
-                DataObj dbo = new DataObj(appSetting, sessionUtility);
+                DataObj dbo = new DataObj(appSetting);
 
                 // RACE LIST
                 IEnumerable<SelectListItem> raceList = new SelectList(dbo.getAllRaces(), "id", "name");
@@ -183,19 +187,19 @@ namespace dungeons_and_dragons_app.Controllers
                 // SPELL LIST
                 IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
 
-                ViewData["race"] = raceList;
-                ViewData["charClass"] = classList;
-                ViewData["alignment"] = alignmentList;
-                ViewData["weapon"] = weaponList;
-                ViewData["spell"] = spellList;
+                model.raceList = raceList;
+                model.classList = classList;
+                model.alignmentList = alignmentList;
+                model.weaponList = weaponList;
+                model.spellList = spellList;
 
                 return View("CharacterEdit", model);
             }
             else
             {
-                DataObj dbo = new DataObj(appSetting, sessionUtility);
-
-                long charId = dbo.editCharacter(model);
+                DataObj dbo = new DataObj(appSetting);
+                int userId = Int32.Parse(HttpContext.Session.GetString("UserID"));
+                long charId = dbo.editCharacter(model, userId);
                 if (charId != -1)
                 {
                     return RedirectToAction("Index", new { id = charId });
@@ -217,11 +221,11 @@ namespace dungeons_and_dragons_app.Controllers
                     // SPELL LIST
                     IEnumerable<SelectListItem> spellList = new SelectList(dbo.getAllSpells(), "id", "name");
 
-                    ViewData["race"] = raceList;
-                    ViewData["charClass"] = classList;
-                    ViewData["alignment"] = alignmentList;
-                    ViewData["weapon"] = weaponList;
-                    ViewData["spell"] = spellList;
+                    model.raceList = raceList;
+                    model.classList = classList;
+                    model.alignmentList = alignmentList;
+                    model.weaponList = weaponList;
+                    model.spellList = spellList;
 
                     return View("CharacterEdit", model);
                 }
@@ -231,7 +235,7 @@ namespace dungeons_and_dragons_app.Controllers
 
         public ActionResult CharacterDelete(int id)
         {
-            DataObj dbo = new DataObj(appSetting, sessionUtility);
+            DataObj dbo = new DataObj(appSetting);
             dbo.deleteCharacterById(id);
             return RedirectToAction("Dashboard", "Home");
 
