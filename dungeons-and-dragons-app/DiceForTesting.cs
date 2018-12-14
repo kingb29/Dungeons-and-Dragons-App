@@ -1,13 +1,13 @@
 ﻿using System;
 
-public class Dice
+public class DiceForTesting
 {
-    private Random rand;
-    private string diceString;
-    private int statModifier;
-    private int proficiencyBonus;
-    private int numRolls;
-    private int numSides;
+    public Random rand;
+    public string diceString;
+    public int statModifier;
+    public int proficiencyBonus;
+    public int numRolls;
+    public int numSides;
 
     public Dice()
     {
@@ -31,7 +31,7 @@ public class Dice
     private void parseDiceString()
     {
         string rollString = diceString.Substring(0, diceString.IndexOf("D"));
-        string sideString = diceString.Substring(diceString.IndexOf("D") + 1);
+        string sideString = diceString.Substring(diceString.IndexOf("D"));
         numRolls = int.Parse(rollString);
         numSides = int.Parse(sideString);
     }
